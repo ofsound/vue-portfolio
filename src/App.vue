@@ -3,22 +3,13 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <h1 class="mt-10 mb-10 bg-gray-500 text-center text-4xl">Welcome to my Website</h1>
-      <nav class="text-2xl">
-        <RouterLink
-          class="[&.router-link-exact-active]:text-red-500 [&.router-link-exact-active]:hover:text-purple-400"
-          to="/"
-          >Home</RouterLink
-        >
-        <RouterLink
-          class="[&.router-link-exact-active]:text-red-500 [&.router-link-exact-active]:hover:text-purple-400"
-          to="/about"
-          >About</RouterLink
-        >
-      </nav>
-    </div>
+  <header class="bg-gray-500">
+    <nav class="mx-10 flex gap-5 py-3 font-bold">
+      <RouterLink class="[&.router-link-exact-active]:text-white" to="/">HOME</RouterLink>
+      <RouterLink class="[&.router-link-exact-active]:text-white" to="/about">ABOUT</RouterLink>
+    </nav>
   </header>
-  <RouterView />
+  <main class="mx-10 mt-10">
+    <RouterView />
+  </main>
 </template>
