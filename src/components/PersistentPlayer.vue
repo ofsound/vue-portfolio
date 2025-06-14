@@ -17,11 +17,21 @@ const pauseAudio = () => {
 </script>
 
 <template>
-  <section class="flex h-12 w-full shrink-0 items-center justify-end bg-gray-500 px-10">
+  <section class="ml-auto flex h-12 max-w-max shrink-0 items-center justify-end px-2">
     <audio ref="audioPlayer" :src="audioSrc"></audio>
-    <button v-if="!isPlaying" class="mr-4 cursor-pointer rounded border px-3" @click="playAudio">
-      play ▸
+    <button
+      v-if="!isPlaying"
+      class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
+      @click="playAudio"
+    >
+      play music ▸
     </button>
-    <button v-if="isPlaying" class="cursor-pointer border px-3" @click="pauseAudio">pause ⥰</button>
+    <button
+      v-if="isPlaying"
+      class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
+      @click="pauseAudio"
+    >
+      pause music ⥰
+    </button>
   </section>
 </template>

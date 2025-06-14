@@ -1,0 +1,24 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const navArray = ref([
+  { title: 'Home', url: '/' },
+  { title: 'About', url: '/about' },
+  { title: 'Animation', url: '/animation' },
+  { title: 'Music', url: '/music' },
+])
+</script>
+
+<template>
+  <nav
+    class="mx-auto mt-6 mb-4 flex max-w-max gap-6 rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-7 py-2"
+  >
+    <template v-for="navItem in navArray" :key="navItem.url">
+      <RouterLink
+        class="relative top-px text-sm tracking-wider [&.router-link-exact-active]:text-white"
+        :to="navItem.url"
+        >{{ navItem.title }}</RouterLink
+      >
+    </template>
+  </nav>
+</template>
