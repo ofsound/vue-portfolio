@@ -20,12 +20,12 @@ onMounted(() => {
 
 <template>
   <h1 class="mb-4 text-4xl">Music</h1>
-  <section class="flex flex-wrap">
+  <section class="flex flex-wrap gap-4">
     <template v-if="dataLoaded">
       <a :href="album.url" v-for="album in albumsArray" :key="album.title">
         <div class="hidden">{{ album.title }}</div>
         <div>
-          <img class="max-w-80" :src="album.image.url" alt="" />
+          <img class="max-w-50" :src="album.image.url" alt="" />
         </div>
       </a>
     </template>
