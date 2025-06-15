@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import GridController from './GridController.vue'
+import CellGrid from './CellGrid.vue'
 import SingleCell from './SingleCell.vue'
 
 defineProps({
@@ -14,7 +14,7 @@ defineProps({
     <div v-for="cell in cellArray" :key="cell.id">
       <SingleCell v-if="!cell.isInner && !cell.isImage" :style="cell.style" :color="cell.color" />
 
-      <GridController v-if="cell.isInner && !cell.isImage" :cellArray="cell.innerArray" />
+      <CellGrid v-if="cell.isInner && !cell.isImage" :cellArray="cell.innerArray" />
 
       <img v-if="cell.isImage" class="h-full w-full object-cover" :src="cell.url" alt="" />
     </div>

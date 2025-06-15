@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import GridController from '@/components/GridController.vue'
+import CellGrid from '@/components/CellGrid.vue'
 
 let index = 0
 
@@ -121,5 +121,5 @@ const cellArray = ref([
 </script>
 
 <template>
-  <GridController :cellArray="cellArray" />
+  <CellGrid :cellArray="cellArray" />
 </template>
