@@ -6,5 +6,5 @@ defineProps<{
 </script>
 
 <template>
-  <div :class="[style, color]" class="h-20 w-20"></div>
+  <div :class="[style, color]" class="h-3/5 w-3/5"></div>
 </template>

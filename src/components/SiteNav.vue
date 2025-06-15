@@ -3,9 +3,9 @@ import { ref } from 'vue'
 
 const navArray = ref([
   { title: 'Home', url: '/' },
-  // { title: 'About', url: '/about' },
   { title: 'Animation', url: '/animation' },
-  // { title: 'Music', url: '/music' },
+  // { title: 'About', url: '/about' },
+  { title: 'Music', url: '/music' },
 ])
 </script>
 
@@ -15,7 +15,7 @@ const navArray = ref([
   >
     <template v-for="navItem in navArray" :key="navItem.url">
       <RouterLink
-        class="relative top-px text-sm tracking-wider transition-all duration-500 [&.router-link-exact-active]:text-white"
+        class="relative top-px text-sm tracking-wider transition-all duration-400 [&.router-link-exact-active]:text-white"
         :to="navItem.url"
         >{{ navItem.title }}</RouterLink
       >
