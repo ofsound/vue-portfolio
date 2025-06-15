@@ -1,5 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-  <p>Maybe a graphic should go here.</p>
+  <p class="text-white">Maybe just an interesting colorful graphic on white</p>
 </template>
