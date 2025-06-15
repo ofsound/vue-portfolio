@@ -2,8 +2,18 @@
 import CellGrid from './CellGrid.vue'
 import SingleCell from './SingleCell.vue'
 
+interface Person {
+  id: number
+  isInner: boolean
+  isImage: boolean
+  style: string
+  url: string
+  color: string
+  innerArray: Person[]
+}
+
 defineProps({
-  cellArray: Array,
+  cellArray: Array<Person>,
 })
 </script>
 
