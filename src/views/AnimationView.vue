@@ -2,19 +2,19 @@
 import { ref } from 'vue'
 import CellGrid from '@/components/CellGrid.vue'
 
-interface Person {
+interface Cell {
   id: number
   isInner: boolean
   isImage: boolean
   style: string
   url: string
   color: string
-  innerArray: Person[]
+  innerArray: Cell[]
 }
 
 let index = 0
 
-const cellArray = ref<Person[]>([
+const cellArray = ref<Cell[]>([
   {
     isImage: true,
     id: index++,
@@ -46,185 +46,83 @@ const cellArray = ref<Person[]>([
   {
     isInner: true,
     isImage: false,
+    id: index++,
+    style: 'animate-spin',
+    color: 'bg-green-500',
+    url: '',
     innerArray: [
       {
         isInner: true,
         isImage: false,
+        id: index++,
+        style: 'animate-spin',
+        color: 'bg-green-500',
+        url: '',
         innerArray: [
-          {
-            isImage: false,
-            id: index++,
-            style: 'animate-spin',
-            color: 'bg-pink-500',
-            isInner: false,
-            url: '',
-            innerArray: [],
-          },
           {
             isImage: true,
             id: index++,
-            url: '/src/assets/dark-was-the-night.jpg',
+            url: '/src/assets/ss.png',
             color: 'bg-blue-500',
             isInner: false,
             style: '',
             innerArray: [],
           },
           {
+            isInner: true,
             isImage: false,
             id: index++,
             style: 'animate-spin',
-            color: 'bg-white',
-            isInner: false,
+            color: 'bg-green-500',
             url: '',
-            innerArray: [],
-          },
-          {
-            isInner: true,
-            isImage: false,
             innerArray: [
               {
                 isInner: true,
                 isImage: false,
+                id: index++,
+                style: 'animate-spin',
+                color: 'bg-green-500',
+                url: '',
                 innerArray: [
-                  {
-                    isImage: false,
-                    id: index++,
-                    style: 'animate-spin',
-                    color: 'bg-pink-500',
-                    isInner: false,
-                    url: '',
-                    innerArray: [],
-                  },
                   {
                     isImage: true,
                     id: index++,
-                    url: '/src/assets/dark-was-the-night.jpg',
+                    url: '/src/assets/ss.png',
                     color: 'bg-blue-500',
                     isInner: false,
                     style: '',
                     innerArray: [],
                   },
                   {
+                    isInner: false,
                     isImage: false,
                     id: index++,
                     style: 'animate-spin',
-                    color: 'bg-white',
-                    isInner: false,
+                    color: 'bg-green-500',
                     url: '',
                     innerArray: [],
                   },
-                  {
-                    isInner: true,
-                    isImage: false,
-                    innerArray: [
-                      {
-                        isImage: false,
-                        id: index++,
-                        style: 'animate-spin',
-                        color: 'bg-pink-500',
-                        isInner: false,
-                        url: '',
-                        innerArray: [],
-                      },
-                      {
-                        isImage: true,
-                        id: index++,
-                        url: '/src/assets/dark-was-the-night.jpg',
-                        color: 'bg-blue-500',
-                        isInner: false,
-                        style: '',
-                        innerArray: [],
-                      },
-                      {
-                        isImage: false,
-                        id: index++,
-                        style: 'animate-spin',
-                        color: 'bg-white',
-                        isInner: false,
-                        url: '',
-                        innerArray: [],
-                      },
-                      {
-                        isImage: false,
-                        id: index++,
-                        style: 'animate-spin',
-                        color: 'bg-blue-500',
-                        isInner: false,
-                        url: '',
-                        innerArray: [],
-                      },
-                    ],
-                    id: index++,
-                    style: '',
-                    url: '',
-                    color: '',
-                  },
                 ],
-                id: index++,
-                style: '',
-                url: '',
-                color: '',
               },
               {
+                isInner: false,
                 isImage: false,
                 id: index++,
                 style: 'animate-spin',
-                color: 'bg-blue-500',
-                isInner: false,
-                url: '',
-                innerArray: [],
-              },
-              {
-                isImage: true,
-                id: index++,
-                url: '/src/assets/dark-was-the-night.jpg',
-                color: 'bg-blue-500',
-                isInner: false,
-                style: '',
-                innerArray: [],
-              },
-              {
-                isImage: false,
-                id: index++,
-                style: 'animate-spin',
-                color: 'bg-blue-500',
-                isInner: false,
+                color: 'bg-green-500',
                 url: '',
                 innerArray: [],
               },
             ],
-            id: 0,
-            style: '',
-            url: '',
-            color: '',
           },
         ],
       },
-
       {
+        isInner: false,
         isImage: false,
         id: index++,
         style: 'animate-spin',
-        color: 'bg-blue-500',
-        isInner: false,
-        url: '',
-        innerArray: [],
-      },
-      {
-        isImage: false,
-        id: index++,
-        style: 'animate-spin',
-        color: 'bg-white',
-        isInner: false,
-        url: '',
-        innerArray: [],
-      },
-      {
-        isImage: false,
-        id: index++,
-        style: 'animate-spin',
-        color: 'bg-blue-500',
-        isInner: false,
+        color: 'bg-green-500',
         url: '',
         innerArray: [],
       },
