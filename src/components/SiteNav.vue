@@ -3,7 +3,8 @@ import { ref } from 'vue'
 
 const navArray = ref([
   { title: 'Home', url: '/' },
-  { title: 'Animation', url: '/animation' },
+  { title: 'Grids', url: '/grids' },
+  { title: 'Borders', url: '/borders' },
   // { title: 'About', url: '/about' },
   { title: 'Music', url: '/music' },
 ])

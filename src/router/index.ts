@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import MusicView from '../views/MusicView.vue'
-import AnimationView from '../views/AnimationView.vue'
+import GridsView from '../views/GridsView.vue'
+import BordersView from '../views/BordersView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,9 +24,14 @@ const router = createRouter({
       component: MusicView,
     },
     {
-      path: '/animation',
-      name: 'animation',
-      component: AnimationView,
+      path: '/grids',
+      name: 'grids',
+      component: GridsView,
+    },
+    {
+      path: '/borders',
+      name: 'borders',
+      component: BordersView,
     },
   ],
 })
