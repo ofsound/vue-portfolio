@@ -1,6 +1,6 @@
 # web-portfolio
 
-First Vue 3 in Vite.
+Baby's First Vue 3 app in Vite.
 
 ## Recommended IDE Setup
 
