@@ -5,7 +5,8 @@ const navArray = ref([
   { title: 'Home', url: '/' },
   { title: 'Grids', url: '/grids' },
   { title: 'Borders', url: '/borders' },
-  { title: 'Greensock', url: '/greensock' },
+  { title: 'Words', url: '/words' },
+  // { title: 'Greensock', url: '/greensock' },
   { title: 'Music', url: '/music' },
 ])
 </script>

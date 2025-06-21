@@ -5,6 +5,7 @@ import MusicView from '../views/MusicView.vue'
 import GridsView from '../views/GridsView.vue'
 import BordersView from '../views/BordersView.vue'
 import GreensockView from '../views/GreensockView.vue'
+import WordsView from '../views/WordsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
       path: '/greensock',
       name: 'greensock',
       component: GreensockView,
+    },
+    {
+      path: '/words',
+      name: 'words',
+      component: WordsView,
     },
   ],
 })

@@ -5,7 +5,7 @@ const bordersArray = ref([
   {
     id: 0,
     classes: [
-      'translate-z-20 rotate-x-2 -rotate-y-10',
+      'translate-z-20 rotate-x-30 -rotate-y-10',
       'drop-shadow-lg',
       'p-4',
       'border-3',
@@ -17,7 +17,7 @@ const bordersArray = ref([
   {
     id: 1,
     classes: [
-      'translate-z-20 rotate-x-2 -rotate-y-10',
+      'translate-z-20 rotate-x-30 -rotate-y-10',
       'drop-shadow-lg',
       'p-4',
       'border-4',
@@ -28,7 +28,7 @@ const bordersArray = ref([
   {
     id: 2,
     classes: [
-      'translate-z-20 rotate-x-2 -rotate-y-10',
+      'translate-z-20 rotate-x-30 -rotate-y-10',
       'drop-shadow-lg',
       'p-3',
       'border-2',
@@ -40,7 +40,7 @@ const bordersArray = ref([
   {
     id: 3,
     classes: [
-      'translate-z-20 rotate-x-2 -rotate-y-10',
+      'translate-z-20 rotate-x-30 -rotate-y-10',
       'drop-shadow-lg',
       'p-4',
       'border-2',
@@ -52,7 +52,7 @@ const bordersArray = ref([
   {
     id: 4,
     classes: [
-      'translate-z-20 rotate-x-2 -rotate-y-10',
+      'translate-z-20 rotate-x-30 -rotate-y-10',
       'drop-shadow-lg',
       'p-1',
       'border-4',
@@ -219,7 +219,7 @@ const bordersArray = ref([
   {
     id: 18,
     classes: [
-      'translate-z-20 rotate-x-2 -rotate-y-10',
+      'translate-z-20 rotate-x-10 -rotate-y-10',
       'drop-shadow-lg',
       'p-4',
       'border-8',
@@ -231,7 +231,7 @@ const bordersArray = ref([
   {
     id: 19,
     classes: [
-      'translate-z-20 rotate-x-2 -rotate-y-10',
+      'translate-z-20 rotate-x-30 -rotate-y-10',
       'drop-shadow-lg',
       'p-4',
       'border-4',
@@ -244,7 +244,7 @@ const bordersArray = ref([
 </script>
 
 <template>
-  <div class="flex h-full bg-blue-950 transform-3d">
+  <div class="flex h-full">
     <BordersItem :depth="-1" :maxDepth="bordersArray.length - 1" :bordersArray="bordersArray" />
   </div>
 </template>

@@ -20,7 +20,7 @@ if (props.depth < props.maxDepth) {
 </script>
 
 <template>
-  <div v-if="depth < maxDepth" class="flex w-full transform-3d" :class="theseClasses">
+  <div v-if="depth < maxDepth" class="flex w-full" :class="theseClasses">
     <BordersItem :depth="depth + 1" :bordersArray="bordersArray" :maxDepth="maxDepth" />
   </div>
 </template>
