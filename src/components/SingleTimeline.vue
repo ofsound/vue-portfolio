@@ -4,7 +4,7 @@ import { gsap } from 'gsap'
 
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 
-import getRandomIntInclusive from '@/utils/getRandomIntInclusive.ts'
+import MathUtils from '@/utils/MathUtils.ts'
 
 gsap.registerPlugin(MotionPathPlugin)
 
@@ -17,11 +17,11 @@ onMounted(() => {
     .to(myElement.value, {
       duration: 1,
       ease: 'power2.in',
-      x: getRandomIntInclusive(0, 300) - 150,
+      x: MathUtils(0, 300) - 150,
       motionPath: [
-        { x: 100, y: getRandomIntInclusive(0, 200) - 100 },
-        { x: getRandomIntInclusive(0, 200) - 100, y: getRandomIntInclusive(0, 200) - 100 },
-        { x: getRandomIntInclusive(0, 300) - 150, y: getRandomIntInclusive(0, 200) - 100 },
+        { x: 100, y: MathUtils(0, 200) - 100 },
+        { x: MathUtils(0, 200) - 100, y: MathUtils(0, 200) - 100 },
+        { x: MathUtils(0, 300) - 150, y: MathUtils(0, 200) - 100 },
       ],
     })
     .to(myElement.value, {
@@ -30,8 +30,8 @@ onMounted(() => {
       ease: 'power3.out',
       motionPath: [
         { x: 100, y: 50 },
-        { x: getRandomIntInclusive(0, 200) - 100, y: getRandomIntInclusive(0, 200) - 100 },
-        { x: getRandomIntInclusive(0, 300) - 150, y: getRandomIntInclusive(0, 200) - 100 },
+        { x: MathUtils(0, 200) - 100, y: MathUtils(0, 200) - 100 },
+        { x: MathUtils(0, 300) - 150, y: MathUtils(0, 200) - 100 },
       ],
     })
     .to(myElement.value, {
@@ -39,9 +39,9 @@ onMounted(() => {
       y: '-10',
       ease: 'power2.in',
       motionPath: [
-        { x: getRandomIntInclusive(0, 200) - 100, y: 50 },
-        { x: getRandomIntInclusive(0, 200) - 100, y: getRandomIntInclusive(0, 200) - 100 },
-        { x: getRandomIntInclusive(0, 300) - 150, y: getRandomIntInclusive(0, 200) - 100 },
+        { x: MathUtils(0, 200) - 100, y: 50 },
+        { x: MathUtils(0, 200) - 100, y: MathUtils(0, 200) - 100 },
+        { x: MathUtils(0, 300) - 150, y: MathUtils(0, 200) - 100 },
       ],
     })
     .to(myElement.value, {
@@ -50,18 +50,18 @@ onMounted(() => {
       ease: 'circ.inOut',
       motionPath: [
         { x: 100, y: 50 },
-        { x: getRandomIntInclusive(0, 200) - 100, y: getRandomIntInclusive(0, 200) - 100 },
-        { x: getRandomIntInclusive(0, 300) - 150, y: getRandomIntInclusive(0, 200) - 100 },
+        { x: MathUtils(0, 200) - 100, y: MathUtils(0, 200) - 100 },
+        { x: MathUtils(0, 300) - 150, y: MathUtils(0, 200) - 100 },
       ],
     })
     .to(myElement.value, {
       duration: 1,
-      x: getRandomIntInclusive(0, 800),
-      y: getRandomIntInclusive(0, 600),
+      x: MathUtils(0, 800),
+      y: MathUtils(0, 600),
       ease: 'sine.in',
       motionPath: [
         { x: 100, y: 50 },
-        { x: getRandomIntInclusive(0, 200) - 100, y: getRandomIntInclusive(0, 200) - 100 },
+        { x: MathUtils(0, 200) - 100, y: MathUtils(0, 200) - 100 },
         { x: 300, y: 100 },
       ],
     })
