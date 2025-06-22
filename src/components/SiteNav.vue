@@ -7,6 +7,7 @@ const navArray = ref([
   { title: 'Borders', url: '/borders' },
   { title: 'Words', url: '/words' },
   { title: 'Timelines', url: '/greensock' },
+  { title: 'Physics', url: '/physics' },
   { title: 'Music', url: '/music' },
 ])
 </script>
@@ -17,7 +18,7 @@ const navArray = ref([
   >
     <template v-for="navItem in navArray" :key="navItem.url">
       <RouterLink
-        class="relative text-sm tracking-wider transition-all duration-400 [&.router-link-exact-active]:text-white"
+        class="relative cursor-pointer text-sm tracking-wider transition-all duration-400 [&.router-link-exact-active]:text-white"
         :to="navItem.url"
         >{{ navItem.title }}</RouterLink
       >

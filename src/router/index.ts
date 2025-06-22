@@ -6,6 +6,7 @@ import GridsView from '../views/GridsView.vue'
 import BordersView from '../views/BordersView.vue'
 import GreensockView from '../views/GreensockView.vue'
 import WordsView from '../views/WordsView.vue'
+import PhysicsView from '../views/PhysicsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,11 @@ const router = createRouter({
       path: '/words',
       name: 'words',
       component: WordsView,
+    },
+    {
+      path: '/physics',
+      name: 'physics',
+      component: PhysicsView,
     },
   ],
 })
