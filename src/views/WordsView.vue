@@ -1,5 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue'
+import SingleWord from '@/components/SingleWord.vue'
+
+const wordArray = ref(['word', 'blue', 'basket', 'avon', 'people', 'brother'])
+</script>
 
 <template>
-  <div class="flex h-full items-center justify-center bg-white">Words</div>
+  <SingleWord v-for="item in wordArray" :key="item" :word="item" />
 </template>
