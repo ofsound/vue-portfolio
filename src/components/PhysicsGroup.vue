@@ -5,50 +5,47 @@ import SinglePhysics from '@/components/SinglePhysics.vue'
 import { getRandomIntInc } from '@/utils/MathUtils.ts'
 import { randomBackgroundColor } from '@/utils/TailwindColors.ts'
 
+interface StyleObject {
+  id: number
+  classes: string[]
+}
+
+const classesArray = ref<StyleObject[]>([])
+
 const classPool = [
   'rounded',
   'rounded-md',
   'rounded-lg',
   'rounded-4xl',
   'rounded-full',
-  'drop-shadow-md',
-  'drop-shadow-lg',
+  // 'drop-shadow-md',
+  // 'drop-shadow-lg',
 ]
 
-const itemsPerGroup = 2
-const totalLayers = 4
-const totalStylesPerLayer = 0
+const recursionDepth = 6
 
-const objectArray = []
+const itemsPerGroup = 3
 
-for (let i = 0; i < totalLayers; i++) {
-  // interface StyleObject {
-  //   id: number
-  //   classes: string[]
-  // }
+const classesPerLayer = 0
 
-  const layerObject = {
+for (let i = 0; i < recursionDepth + 1; i++) {
+  const object: StyleObject = {
     id: i,
-    classes: ['border'],
+    classes: [],
   }
 
-  for (let i = 0; i < totalStylesPerLayer; i++) {
-    const randomInt = getRandomIntInc(0, classPool.length - 1)
-    layerObject.classes.push(classPool[randomInt])
+  for (let i = 0; i < classesPerLayer; i++) {
+    object.classes.push(classPool[getRandomIntInc(0, classPool.length - 1)])
   }
 
-  const colorString = randomBackgroundColor()
+  object.classes.push(randomBackgroundColor())
 
-  layerObject.classes.push(colorString)
-
-  objectArray.push(layerObject)
+  classesArray.value.push(object)
 }
-
-const classesArray = ref(objectArray)
 </script>
 
 <template>
-  <div class="flex h-full bg-white">
+  <div class="relative flex h-full bg-gray-200">
     <SinglePhysics
       :depth="-1"
       :itemsPerGroup="itemsPerGroup"

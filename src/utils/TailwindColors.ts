@@ -1,6 +1,5 @@
 import { getRandomIntInc } from '@/utils/MathUtils.ts'
 
-
 export default function TailwindColors() {
 }
 

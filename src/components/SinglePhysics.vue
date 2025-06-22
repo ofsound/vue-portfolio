@@ -37,9 +37,11 @@ const div = ref(null)
 
 onMounted(() => {
   gsap.to(div.value, {
+    delay: props.depth * 1,
     duration: 30,
     physics2D: {
-      velocity: getRandomIntIncBip(30),
+      velocity: getRandomIntIncBip(30) * props.depth,
+      acceleration: Math.random() * 2,
       angle: getRandomIntIncBip(180),
       gravity: getRandomIntIncBip(0),
       friction: 0.005,
@@ -76,12 +78,16 @@ onMounted(() => {
 div {
   position: absolute;
   left: 0;
-  top: 50%;
   right: 0;
   margin-inline: auto;
-  height: 30px;
-  width: 30px;
-  /* border: 1px solid #000; */
-  opacity: 1;
+  height: 25px;
+  width: 25px;
+  border: 1px solid #000;
+}
+
+.h-full > div:first-child {
+  background: transparent;
+  border: 0;
+  top: 50%;
 }
 </style>
