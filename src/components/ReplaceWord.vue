@@ -14,8 +14,6 @@ const props = defineProps<{
 }>()
 
 onMounted(() => {
-  // const split = SplitText.create(textOne.value)
-
   gsap.to(textOne.value, {
     duration: 2,
     x: getRandomIntInclusive(0, 500),

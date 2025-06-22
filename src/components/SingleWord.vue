@@ -5,8 +5,6 @@ import { SplitText } from 'gsap/SplitText'
 
 import getRandomIntInclusive from '@/utils/getRandomIntInclusive.ts'
 
-// ScrambleText, (Replace)Text
-
 const textOne = ref(null)
 
 defineProps<{

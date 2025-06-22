@@ -14,18 +14,13 @@ const props = defineProps<{
 }>()
 
 onMounted(() => {
-  // const split = SplitText.create(textOne.value)
-
   gsap.to(textOne.value, {
     duration: 2,
     x: getRandomIntInclusive(0, 500),
     y: getRandomIntInclusive(0, 500),
     scrambleText: {
       text: props.word,
-      // chars: 'XO',
-      // revealDelay: 1.5,
       speed: 1.3,
-      // newClass: 'myClass',
     },
   })
 })
