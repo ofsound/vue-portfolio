@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { gsap } from 'gsap'
 import { TextPlugin } from 'gsap/TextPlugin'
 
-import MathUtils from '@/utils/MathUtils.ts'
+import { getRandomIntInc } from '@/utils/MathUtils.ts'
 
 gsap.registerPlugin(TextPlugin)
 
@@ -16,8 +16,8 @@ const props = defineProps<{
 onMounted(() => {
   gsap.to(textOne.value, {
     duration: 2,
-    x: MathUtils(0, 500),
-    y: MathUtils(0, 500),
+    x: getRandomIntInc(0, 500),
+    y: getRandomIntInc(0, 500),
     text: props.word,
   })
 })

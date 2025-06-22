@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
 
-import MathUtils from '@/utils/MathUtils.ts'
+import { getRandomIntInc } from '@/utils/MathUtils.ts'
 
 const textOne = ref(null)
 
@@ -16,16 +16,16 @@ onMounted(() => {
 
   gsap.from(split.chars, {
     duration: 1,
-    x: MathUtils(0, 300),
-    y: MathUtils(0, 300),
+    x: getRandomIntInc(0, 300),
+    y: getRandomIntInc(0, 300),
     autoAlpha: 0,
     stagger: 0.1,
   })
 
   gsap.to(textOne.value, {
     duration: 2,
-    x: MathUtils(0, 300),
-    y: MathUtils(0, 300),
+    x: getRandomIntInc(0, 300),
+    y: getRandomIntInc(0, 300),
   })
 })
 </script>

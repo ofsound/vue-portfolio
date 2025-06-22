@@ -85,6 +85,7 @@ div {
   border: 1px solid #000;
 }
 
+/* Hide the initial solo container instance of this */
 .h-full > div:first-child {
   background: transparent;
   border: 0;

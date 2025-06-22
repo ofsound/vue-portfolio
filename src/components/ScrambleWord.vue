@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { gsap } from 'gsap'
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
 
-import MathUtils from '@/utils/MathUtils.ts'
+import { getRandomIntInc } from '@/utils/MathUtils.ts'
 
 gsap.registerPlugin(ScrambleTextPlugin)
 
@@ -16,8 +16,8 @@ const props = defineProps<{
 onMounted(() => {
   gsap.to(textOne.value, {
     duration: 2,
-    x: MathUtils(0, 500),
-    y: MathUtils(0, 500),
+    x: getRandomIntInc(0, 500),
+    y: getRandomIntInc(0, 500),
     scrambleText: {
       text: props.word,
       speed: 1.3,
