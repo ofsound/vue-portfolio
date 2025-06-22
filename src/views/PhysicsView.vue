@@ -1,67 +1,9 @@
 <script setup lang="ts">
-import SinglePhysics from '@/components/SinglePhysics.vue'
+import PhysicsGroup from '@/components/PhysicsGroup.vue'
 </script>
 
 <template>
-  <div class="relative h-full">
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
-    <SinglePhysics />
+  <div class="relative h-full overflow-hidden">
+    <PhysicsGroup />
   </div>
 </template>

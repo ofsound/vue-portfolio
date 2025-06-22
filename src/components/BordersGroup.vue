@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import BordersItem from '@/components/BordersItem.vue'
-import MathUtils from '@/utils/MathUtils.ts'
+
+import { getRandomIntInc, getRandomIntIncBip } from '@/utils/MathUtils.ts'
 
 // Put these somewhere else?
 const allBorderColors = [
@@ -348,12 +349,12 @@ for (let i = 0; i < totalLayers; i++) {
   }
 
   for (let i = 0; i < totalStylesPerLayer; i++) {
-    const randomInt = MathUtils(0, borderStyles.length - 1)
+    const randomInt = getRandomIntInc(0, borderStyles.length - 1)
     layerObject.classes.push(borderStyles[randomInt])
   }
 
-  const randomIntColorBase = MathUtils(0, colorBases.length - 1)
-  const randomIntColorWeight = MathUtils(0, colorWeights.length - 1)
+  const randomIntColorBase = getRandomIntInc(0, colorBases.length - 1)
+  const randomIntColorWeight = getRandomIntInc(0, colorWeights.length - 1)
 
   const colorString =
     'border-' + colorBases[randomIntColorBase] + colorWeights[randomIntColorWeight]
