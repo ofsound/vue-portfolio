@@ -4,7 +4,7 @@ import AboutView from '../views/AboutView.vue'
 import MusicView from '../views/MusicView.vue'
 import GridsView from '../views/GridsView.vue'
 import BordersView from '../views/BordersView.vue'
-import GreensockView from '../views/GreensockView.vue'
+import TimelinesView from '../views/TimelinesView.vue'
 import WordsView from '../views/WordsView.vue'
 import PhysicsView from '../views/PhysicsView.vue'
 
@@ -37,9 +37,9 @@ const router = createRouter({
       component: BordersView,
     },
     {
-      path: '/greensock',
-      name: 'greensock',
-      component: GreensockView,
+      path: '/timelines',
+      name: 'timelines',
+      component: TimelinesView,
     },
     {
       path: '/words',

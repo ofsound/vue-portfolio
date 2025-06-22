@@ -6,7 +6,7 @@ const navArray = ref([
   { title: 'Grids', url: '/grids' },
   { title: 'Borders', url: '/borders' },
   { title: 'Words', url: '/words' },
-  { title: 'Timelines', url: '/greensock' },
+  { title: 'Timelines', url: '/timelines' },
   { title: 'Physics', url: '/physics' },
   // { title: 'Music', url: '/music' },
 ])
