@@ -17,13 +17,14 @@ const tweenArrayLength = 50
 
 for (let index = 0; index < tweenArrayLength; index++) {
   const tweenObject = {
-    duration: getRandomIntInc(9, 15),
+    duration: getRandomIntInc(12, 20),
     x: getRandomIntIncBip(300),
     y: getRandomIntIncBip(800),
     skewX: getRandomIntIncBip(50),
     skewY: getRandomIntIncBip(50),
+    rotation: getRandomIntIncBip(180),
     scaleX: 1 + Math.random() * 10,
-    ease: 'linear',
+    ease: 'power2.inOut',
     motionPath: [
       { x: getRandomIntIncBip(300), y: getRandomIntIncBip(300) },
       { x: getRandomIntIncBip(300), y: getRandomIntIncBip(300) },
@@ -46,6 +47,6 @@ onMounted(() => {
   <div
     ref="div"
     :class="bgColorClass"
-    class="absolute top-1/2 right-0 left-0 mx-auto h-10 w-10 rounded opacity-70"
+    class="absolute top-1/2 right-0 left-0 mx-auto h-10 w-10 rounded border border-gray-700 opacity-80"
   ></div>
 </template>
