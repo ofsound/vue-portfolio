@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 
-import PlayerVisualizers from '@/components/player/PlayerVisualizers.vue'
+import SpectrumVisualizer from '@/components/player/SpectrumVisualizer.vue'
+import WaveformVisualizer from '@/components/player/WaveformVisualizer.vue'
 
 let startTime = 0
 const trackIndex = ref(0)
@@ -17,14 +18,18 @@ const gainNode = audioContext.createGain()
 const analyser = audioContext.createAnalyser()
 
 analyser.fftSize = 256
-// const bufferLength = analyser.frequencyBinCount
-// const dataArray = new Uint8Array(bufferLength)
 
 let audioBuffer: AudioBuffer = new AudioBuffer({
   numberOfChannels: 2,
   length: audioContext.sampleRate * 0.5,
   sampleRate: audioContext.sampleRate,
 })
+
+const audioData = [
+  { title: 'Ghost Camels', file: '01.mp3' },
+  { title: 'Abu Rawash', file: '02.mp3' },
+  { title: 'Get Thee Behind Me', file: '03.mp3' },
+]
 
 async function loadAudioBuffers(fileNames: Array<string>) {
   const buffers = await Promise.all(
@@ -41,12 +46,6 @@ async function loadAudioBuffers(fileNames: Array<string>) {
   )
   return buffers.filter((buffer) => buffer !== null)
 }
-
-const audioData = [
-  { title: 'Ghost Camels', file: '01.mp3' },
-  { title: 'Abu Rawash', file: '02.mp3' },
-  { title: 'Get Thee Behind Me', file: '03.mp3' },
-]
 
 const buffers = await loadAudioBuffers(audioData.map((track) => track.file))
 
@@ -189,6 +188,9 @@ onMounted(() => {
         next
       </button>
     </div>
-    <PlayerVisualizers :analyser />
+    <div class="flex">
+      <SpectrumVisualizer :analyser />
+      <WaveformVisualizer :analyser />
+    </div>
   </section>
 </template>
