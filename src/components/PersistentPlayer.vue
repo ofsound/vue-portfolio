@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 
-const audioContext = new window.AudioContext()
-const gainNode = audioContext.createGain()
-
 let startTime = 0
 const elapsed = ref(0)
 const progressPercentage = ref(0)
+
+const audioContext = new window.AudioContext()
+const gainNode = audioContext.createGain()
 
 let audioBuffer: AudioBuffer = new AudioBuffer({
   numberOfChannels: 2, // Stereo
@@ -41,6 +41,20 @@ const toggleAudio = () => {
   }
 }
 
+function updateProgressBar() {
+  elapsed.value = audioContext.currentTime - startTime
+  if (audioBuffer) {
+    progressPercentage.value = (elapsed.value / audioBuffer.duration) * 100
+  }
+  requestAnimationFrame(updateProgressBar)
+}
+
+function formatTime(seconds: number) {
+  const minutes = Math.floor(seconds / 60)
+  const remainingSeconds = Math.floor(seconds % 60)
+  return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`
+}
+
 onMounted(() => {
   const volumeControl = document.querySelector('#volume') as HTMLInputElement
   if (volumeControl) {
@@ -53,22 +67,6 @@ onMounted(() => {
     )
   }
 })
-
-function updateProgressBar() {
-  // if (source.playbackState === AudioBufferSourceNode.PLAYING_STATE) {
-  elapsed.value = audioContext.currentTime - startTime
-  if (audioBuffer) {
-    progressPercentage.value = (elapsed.value / audioBuffer.duration) * 100
-  }
-
-  requestAnimationFrame(updateProgressBar)
-}
-
-function formatTime(seconds: number) {
-  const minutes = Math.floor(seconds / 60)
-  const remainingSeconds = Math.floor(seconds % 60)
-  return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`
-}
 </script>
 
 <template>
