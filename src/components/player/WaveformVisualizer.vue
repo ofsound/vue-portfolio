@@ -13,10 +13,10 @@ let drawVisual = -1
 onMounted(() => {
   const canvas = document.getElementById('myCanvas2') as HTMLCanvasElement
 
-  const canvasCtx = canvas.getContext('2d')
+  const canvasContext = canvas.getContext('2d')
 
-  if (canvasCtx) {
-    canvasCtx.clearRect(0, 0, 150, 150)
+  if (canvasContext) {
+    canvasContext.clearRect(0, 0, 150, 150)
   }
 
   function draw() {
@@ -24,9 +24,9 @@ onMounted(() => {
 
     props.analyser.getByteFrequencyData(dataArray)
 
-    if (canvasCtx) {
-      canvasCtx.fillStyle = 'rgb(0 0 0)'
-      canvasCtx.fillRect(0, 0, 150, 150)
+    if (canvasContext) {
+      canvasContext.fillStyle = 'rgb(0 0 0)'
+      canvasContext.fillRect(0, 0, 150, 150)
 
       const barWidth = (150 / bufferLength) * 2.5
       let barHeight
@@ -41,8 +41,8 @@ onMounted(() => {
           barHeight = 10
         }
 
-        canvasCtx.fillStyle = `rgb(${barHeight + 100} 50 50)`
-        canvasCtx.fillRect(x, 150 - barHeight / 2, barWidth, barHeight)
+        canvasContext.fillStyle = `rgb(${barHeight + 100} 50 50)`
+        canvasContext.fillRect(x, 150 - barHeight / 2, barWidth, barHeight)
 
         x += barWidth + 1
       }
