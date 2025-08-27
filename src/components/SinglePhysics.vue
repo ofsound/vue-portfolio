@@ -30,34 +30,39 @@ for (let index = 0; index < props.itemsPerGroup; index++) {
 const theseClasses = ref<string[]>([])
 
 if (props.depth < props.maxDepth) {
-  theseClasses.value = props.classesArray[props.depth + 1].classes
+  const thisObject = props.classesArray[props.depth + 1]
+  if (thisObject) {
+    theseClasses.value = thisObject.classes
+  }
 }
 
 const div = ref(null)
 
 onMounted(() => {
-  gsap.to(div.value, {
-    delay: props.depth * 1,
-    duration: 30,
-    physics2D: {
-      velocity: getRandomIntIncBip(30) * props.depth,
-      acceleration: Math.random() * 2,
-      angle: getRandomIntIncBip(180),
-      gravity: getRandomIntIncBip(0),
-      friction: 0.005,
-    },
-    physicsProps: {
-      rotation: {
-        // velocity: getRandomIntInc(100, 300),
-        friction: 0.01,
-        // acceleration: getRandomIntInc(0, 20),
+  if (div.value) {
+    gsap.to(div.value, {
+      delay: props.depth * 1,
+      duration: 30,
+      physics2D: {
+        velocity: getRandomIntIncBip(30) * props.depth,
+        acceleration: Math.random() * 2,
+        angle: getRandomIntIncBip(180),
+        gravity: getRandomIntIncBip(0),
+        friction: 0.005,
       },
-      scale: {
-        // velocity: getRandomIntInc(0, 1) * 0.1,
-        friction: 0.11 * Math.random(),
+      physicsProps: {
+        rotation: {
+          // velocity: getRandomIntInc(100, 300),
+          friction: 0.01,
+          // acceleration: getRandomIntInc(0, 20),
+        },
+        scale: {
+          // velocity: getRandomIntInc(0, 1) * 0.1,
+          friction: 0.11 * Math.random(),
+        },
       },
-    },
-  })
+    })
+  }
 })
 </script>
 

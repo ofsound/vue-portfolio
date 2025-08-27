@@ -18,15 +18,16 @@ const classPool = [
   'rounded-lg',
   'rounded-4xl',
   'rounded-full',
-  // 'drop-shadow-md',
-  // 'drop-shadow-lg',
+  'rotate-12',
+  'rotate-6',
+  'scale-75',
+  'scale-50',
+  'scale-200',
 ]
 
 const recursionDepth = 6
-
 const itemsPerGroup = 3
-
-const classesPerLayer = 0
+const classesPerLayer = 3
 
 for (let i = 0; i < recursionDepth + 1; i++) {
   const object: StyleObject = {
@@ -35,7 +36,11 @@ for (let i = 0; i < recursionDepth + 1; i++) {
   }
 
   for (let i = 0; i < classesPerLayer; i++) {
-    object.classes.push(classPool[getRandomIntInc(0, classPool.length - 1)])
+    const randomInt = getRandomIntInc(0, classPool.length - 1)
+    const randomClassFromPool = classPool[randomInt]
+    if (randomClassFromPool) {
+      object.classes.push(randomClassFromPool)
+    }
   }
 
   object.classes.push(randomBackgroundColor())
