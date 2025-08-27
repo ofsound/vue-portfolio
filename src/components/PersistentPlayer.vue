@@ -9,6 +9,8 @@ const trackIndex = ref(0)
 const elapsed = ref(0)
 const progressPercentage = ref(0)
 
+const rangeValue = ref(1)
+
 let firstPlay = true
 
 const audioContext = new window.AudioContext()
@@ -69,6 +71,8 @@ const playAudio = (index: number) => {
   requestAnimationFrame(updateProgressBar)
 }
 
+playAudio(0)
+
 const toggleAudio = () => {
   if (audioContext.state === 'suspended') {
     audioContext.resume()
@@ -88,7 +92,7 @@ const prevTrack = () => {
   }
 }
 const nextTrack = () => {
-  if (trackIndex.value < audioData.length) {
+  if (trackIndex.value < audioData.length - 1) {
     trackIndex.value++
     playAudio(trackIndex.value)
   }
@@ -155,7 +159,8 @@ onMounted(() => {
         :key="track"
         @click="playlistClick(index)"
       >
-        {{ track }}
+        {{ index + 1 }}. {{ track }}
+        {{ index == trackIndex ? '*' : '' }}
       </div>
     </div>
     <div>{{ currentTrackTitle }}</div>
@@ -168,27 +173,28 @@ onMounted(() => {
       </div>
       <div>{{ formatTime(elapsed) }}</div>
       <div>{{ formatTime(audioBuffer.duration) }}</div>
-      <input type="range" id="volume" min="0" max="2" value="1" step="0.01" />
+      <div>{{ rangeValue }}</div>
+      <input type="range" id="volume" min="0" max="2" v-model="rangeValue" step="0.01" />
       <button
         class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
         @click="prevTrack"
       >
-        prev
+        &lt;
       </button>
       <button
         class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
         @click="toggleAudio"
       >
-        play/pause
+        {{ audioContext.state === 'suspended' ? 'play' : 'pause' }}
       </button>
       <button
         class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
         @click="nextTrack"
       >
-        next
+        &gt;
       </button>
     </div>
-    <div class="flex">
+    <div class="mt-6 flex gap-8 bg-gray-300 p-10">
       <SpectrumVisualizer :analyser />
       <WaveformVisualizer :analyser />
     </div>
