@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import BordersItem from '@/components/BordersItem.vue'
 
 import { getRandomIntInc } from '@/utils/MathUtils.ts'
@@ -79,7 +78,7 @@ const colorWeights = [
 const totalLayers = 32
 const totalStylesPerLayer = 9
 
-const objectArray = []
+const objects = []
 
 for (let i = 0; i < totalLayers; i++) {
   interface StyleObject {
@@ -108,14 +107,14 @@ for (let i = 0; i < totalLayers; i++) {
 
   layerObject.classes.push(colorString)
 
-  objectArray.push(layerObject)
+  objects.push(layerObject)
 }
 
-const bordersArray = ref(objectArray)
+const borders = objects
 </script>
 
 <template>
-  <div class="flex h-full bg-black">
-    <BordersItem :depth="-1" :maxDepth="bordersArray.length - 1" :bordersArray="bordersArray" />
+  <div class="flex h-full overflow-hidden bg-black">
+    <BordersItem :depth="-1" :maxDepth="borders.length - 1" :borders="borders" />
   </div>
 </template>

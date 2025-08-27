@@ -9,13 +9,13 @@ interface Custom {
 const props = defineProps<{
   maxDepth: number
   depth: number
-  bordersArray: Custom[]
+  borders: Custom[]
 }>()
 
 const theseClasses = ref<string[]>([])
 
 if (props.depth < props.maxDepth) {
-  const thisObject = props.bordersArray[props.depth + 1]
+  const thisObject = props.borders[props.depth + 1]
   if (thisObject) {
     theseClasses.value = thisObject.classes
   }
@@ -24,6 +24,6 @@ if (props.depth < props.maxDepth) {
 
 <template>
   <div v-if="depth < maxDepth" class="flex w-full" :class="theseClasses">
-    <BordersItem :depth="depth + 1" :bordersArray="bordersArray" :maxDepth="maxDepth" />
+    <BordersItem :depth="depth + 1" :borders="borders" :maxDepth="maxDepth" />
   </div>
 </template>
