@@ -198,17 +198,17 @@ onMounted(() => {
 
   function draw2() {
     drawVisual2 = requestAnimationFrame(draw2)
+
     analyser.getByteTimeDomainData(dataArray)
-    // Fill solid color
 
     if (canvasCtx2) {
       canvasCtx2.fillStyle = 'rgb(200 200 200)'
       canvasCtx2.fillRect(0, 0, 150, 150)
-      // Begin the path
+
       canvasCtx2.lineWidth = 2
       canvasCtx2.strokeStyle = 'rgb(0 0 0)'
       canvasCtx2.beginPath()
-      // Draw each point in the waveform
+
       const sliceWidth = 150 / bufferLength
       let x = 0
       for (let i = 0; i < bufferLength; i++) {
@@ -228,7 +228,6 @@ onMounted(() => {
         }
       }
 
-      // Finish the line
       canvasCtx2.lineTo(150, 150 / 2)
       canvasCtx2.stroke()
     }
