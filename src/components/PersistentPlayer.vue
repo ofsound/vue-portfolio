@@ -6,11 +6,12 @@ const elapsed = ref(0)
 const progressPercentage = ref(0)
 
 const audioContext = new window.AudioContext()
+let source = audioContext.createBufferSource()
 const gainNode = audioContext.createGain()
 
 let audioBuffer: AudioBuffer = new AudioBuffer({
-  numberOfChannels: 2, // Stereo
-  length: audioContext.sampleRate * 0.5, // 0.5 seconds of audio
+  numberOfChannels: 2,
+  length: audioContext.sampleRate * 0.5,
   sampleRate: audioContext.sampleRate,
 })
 
@@ -19,7 +20,6 @@ async function playMp3WithWebAudio(url: string): Promise<void> {
   const arrayBuffer = await response.arrayBuffer()
   audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
 
-  const source = audioContext.createBufferSource()
   source.buffer = audioBuffer
 
   source.connect(gainNode).connect(audioContext.destination)
@@ -31,6 +31,23 @@ const playAudio = () => {
   playMp3WithWebAudio('01.mp3').catch((error) => console.error('Error playing audio:', error))
   startTime = audioContext.currentTime
   requestAnimationFrame(updateProgressBar)
+}
+
+const seekAudio = (event: MouseEvent) => {
+  if (source) {
+    source.stop()
+  }
+
+  const clickedElement = event.target as HTMLElement
+  const offsetX = event.offsetX
+  const startOffset = audioBuffer.duration * (offsetX / clickedElement.clientWidth)
+
+  source = audioContext.createBufferSource()
+  source.buffer = audioBuffer
+  source.connect(gainNode).connect(audioContext.destination)
+  source.start(0, startOffset)
+
+  startTime = audioContext.currentTime - startOffset
 }
 
 const toggleAudio = () => {
@@ -70,9 +87,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="ml-auto flex h-12 max-w-max shrink-0 items-center justify-end gap-4 px-2">
-    <div class="h-full w-full bg-gray-200">
-      <div :style="{ width: progressPercentage + '%' }" class="h-full bg-green-800"></div>
+  <section class="ml-auto flex h-12 w-full shrink-0 items-center justify-end gap-4 px-2">
+    <div class="h-full w-full bg-gray-200" @click="seekAudio">
+      <div
+        :style="{ width: progressPercentage + '%' }"
+        class="pointer-events-none h-full bg-green-800"
+      ></div>
     </div>
     <div>{{ formatTime(elapsed) }}</div>
     <div>{{ formatTime(audioBuffer.duration) }}</div>
