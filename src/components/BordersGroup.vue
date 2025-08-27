@@ -94,7 +94,10 @@ for (let i = 0; i < totalLayers; i++) {
 
   for (let i = 0; i < totalStylesPerLayer; i++) {
     const randomInt = getRandomIntInc(0, borderStyles.length - 1)
-    layerObject.classes.push(borderStyles[randomInt])
+    const thisStyle = borderStyles[randomInt]
+    if (thisStyle) {
+      layerObject.classes.push(thisStyle)
+    }
   }
 
   const randomIntColorBase = getRandomIntInc(0, colorBases.length - 1)

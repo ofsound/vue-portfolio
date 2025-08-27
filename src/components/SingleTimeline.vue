@@ -11,11 +11,11 @@ const div = ref(null)
 
 const bgColorClass = ref(randomBackgroundColor())
 
-const tweenArray: object[] = []
+const tweens: object[] = []
 
-const tweenArrayLength = 50
+const tweensLength = 50
 
-for (let index = 0; index < tweenArrayLength; index++) {
+for (let index = 0; index < tweensLength; index++) {
   const tweenObject = {
     duration: getRandomIntInc(12, 20),
     x: getRandomIntIncBip(300),
@@ -31,14 +31,17 @@ for (let index = 0; index < tweenArrayLength; index++) {
       { x: getRandomIntIncBip(300), y: getRandomIntIncBip(300) },
     ],
   }
-  tweenArray.push(tweenObject)
+  tweens.push(tweenObject)
 }
 
 onMounted(() => {
   const timeline = gsap.timeline({ repeat: -1, yoyo: true })
 
-  for (let index = 0; index < tweenArray.length; index++) {
-    timeline.to(div.value, tweenArray[index])
+  for (let index = 0; index < tweens.length; index++) {
+    const tweenObject = tweens[index]
+    if (tweenObject) {
+      timeline.to(div.value, tweenObject)
+    }
   }
 })
 </script>

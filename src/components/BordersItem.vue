@@ -15,7 +15,10 @@ const props = defineProps<{
 const theseClasses = ref<string[]>([])
 
 if (props.depth < props.maxDepth) {
-  theseClasses.value = props.bordersArray[props.depth + 1].classes
+  const thisObject = props.bordersArray[props.depth + 1]
+  if (thisObject) {
+    theseClasses.value = thisObject.classes
+  }
 }
 </script>
 
