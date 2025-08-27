@@ -31,7 +31,7 @@ async function loadAudioBuffers(fileNames: Array<string>) {
       }
     }),
   )
-  return buffers.filter((buffer) => buffer !== null) // Filter out any failed loads
+  return buffers.filter((buffer) => buffer !== null)
 }
 
 const audioData = [
@@ -72,6 +72,19 @@ const toggleAudio = () => {
 
 const playlistClick = (index: number) => {
   playAudio(index)
+}
+
+const prevTrack = () => {
+  if (trackIndex.value > 0) {
+    trackIndex.value--
+    playAudio(trackIndex.value)
+  }
+}
+const nextTrack = () => {
+  if (trackIndex.value < audioData.length) {
+    trackIndex.value++
+    playAudio(trackIndex.value)
+  }
 }
 
 const seekAudio = (event: MouseEvent) => {
@@ -128,17 +141,18 @@ onMounted(() => {
 
 <template>
   <section class="ml-auto w-full shrink-0">
-    <div>
-      <a
+    <div class="my-4 bg-gray-400">
+      <div
+        class="hover:underline"
         v-for="(track, index) in audioData.map((track) => track.title)"
         :key="track"
         @click="playlistClick(index)"
       >
         {{ track }}
-      </a>
+      </div>
     </div>
     <div>{{ currentTrackTitle }}</div>
-    <div class="flex h-12 items-center justify-end gap-4 px-2">
+    <div class="flex h-12 items-center justify-end gap-4">
       <div class="h-full w-full bg-gray-200" @click="seekAudio">
         <div
           :style="{ width: progressPercentage + '%' }"
@@ -148,17 +162,23 @@ onMounted(() => {
       <div>{{ formatTime(elapsed) }}</div>
       <div>{{ formatTime(audioBuffer.duration) }}</div>
       <input type="range" id="volume" min="0" max="2" value="1" step="0.01" />
-      <!-- <button
+      <button
         class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
-        @click="playAudio"
+        @click="prevTrack"
       >
-        play
-      </button> -->
+        prev
+      </button>
       <button
         class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
         @click="toggleAudio"
       >
-        toggle
+        play/pause
+      </button>
+      <button
+        class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
+        @click="nextTrack"
+      >
+        next
       </button>
     </div>
   </section>
