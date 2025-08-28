@@ -152,8 +152,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mb-8 px-12">
-    <section class="w-full shrink-0 border-1 border-gray-300">
+  <div class="mb-8">
+    <section class="w-full shrink-0">
       <div class="my-4 hidden bg-gray-400 p-4">
         <div
           class="hover:underline"
@@ -166,35 +166,57 @@ onMounted(() => {
         </div>
       </div>
 
-      <div class="px-2">
+      <div class="">
         <div class="flex h-20 basis-1/3 items-center justify-between gap-4 [&>*]:flex-1">
           <div class="flex h-full flex-col">
-            <div class="mt-6">{{ currentTrackTitle }}</div>
-            <div class="mt-auto text-sm">{{ formatTime(elapsed) }}</div>
+            <div class="mt-5 text-xl font-bold">
+              <div class="border-0 border-b-2 border-gray-300 px-1 py-1">
+                {{ currentTrackTitle }}
+              </div>
+            </div>
           </div>
           <div class="flex h-2/3 justify-center gap-2">
             <button
-              class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
+              class="mt-1 aspect-square max-h-7/8 cursor-pointer rounded-full bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm font-black hover:bg-gray-400"
               @click="prevTrack"
             >
-              &lt;
+              &#9664;
             </button>
             <button
-              class="h-full w-23 cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
+              class="relative block aspect-square cursor-pointer rounded-full bg-linear-to-t from-sky-600 to-indigo-300 px-3 hover:bg-gray-400"
               @click="toggleAudio"
             >
-              {{ audioContext.state === 'suspended' ? 'play' : 'pause' }}
+              <svg
+                v-if="audioContext.state === 'suspended'"
+                xmlns="http://www.w3.org/2000/svg"
+                class="absolute top-[17px] right-0 left-1 mr-auto ml-auto h-6 w-6"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M133 440a35.37 35.37 0 01-17.5-4.67c-12-6.8-19.46-20-19.46-34.33V111c0-14.37 7.46-27.53 19.46-34.33a35.13 35.13 0 0135.77.45l247.85 148.36a36 36 0 010 61l-247.89 148.4A35.5 35.5 0 01133 440z"
+                />
+              </svg>
+              <svg
+                v-if="audioContext.state !== 'suspended'"
+                xmlns="http://www.w3.org/2000/svg"
+                class="absolute top-[17.5px] right-0 left-0 mr-auto ml-auto h-6 w-6"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M208 432h-48a16 16 0 01-16-16V96a16 16 0 0116-16h48a16 16 0 0116 16v320a16 16 0 01-16 16zM352 432h-48a16 16 0 01-16-16V96a16 16 0 0116-16h48a16 16 0 0116 16v320a16 16 0 01-16 16z"
+                />
+              </svg>
             </button>
             <button
-              class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
+              class="mt-1 aspect-square max-h-7/8 cursor-pointer rounded-full bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
               @click="nextTrack"
             >
-              &gt;
+              &#9654;
             </button>
           </div>
-          <div class="flex h-full flex-col items-end text-right">
+          <div class="flex h-full flex-col items-end px-2 text-right">
             <input
-              class="mt-8 max-w-7/8"
+              class="mt-8 max-w-7/8 px-2"
               type="range"
               id="volume"
               min="0"
@@ -202,19 +224,23 @@ onMounted(() => {
               v-model="rangeValue"
               step="0.01"
             />
-            <div class="mt-auto text-sm">{{ formatTime(audioBuffer.duration) }}</div>
           </div>
         </div>
       </div>
-
-      <div class="flex h-4 w-full bg-gray-200" @click="seekAudio">
-        <div
-          :style="{ width: progressPercentage + '%' }"
-          class="pointer-events-none h-full bg-green-800"
-        ></div>
+      <div class="text-xs font-bold tabular-nums">
+        {{ formatTime(elapsed) }} / {{ formatTime(audioBuffer.duration) }}
       </div>
 
-      <div class="mt-6 hidden gap-8 bg-gray-300 p-10">
+      <div class="mt-1 opacity-80 hover:opacity-100">
+        <div class="flex h-4 w-full bg-gray-100" @click="seekAudio">
+          <div
+            :style="{ width: progressPercentage + '%' }"
+            class="pointer-events-none h-full bg-green-800"
+          ></div>
+        </div>
+      </div>
+
+      <div class="mt-6 hidden gap-8 bg-gray-900 p-10">
         <SpectrumVisualizer :analyser />
         <WaveformVisualizer :analyser />
       </div>
