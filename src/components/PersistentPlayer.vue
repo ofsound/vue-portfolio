@@ -82,6 +82,7 @@ const toggleAudio = () => {
 }
 
 const playlistClick = (index: number) => {
+  trackIndex.value = index
   playAudio(index)
 }
 
@@ -163,37 +164,42 @@ onMounted(() => {
         {{ index == trackIndex ? '*' : '' }}
       </div>
     </div>
-    <div>{{ currentTrackTitle }}</div>
-    <div class="flex h-12 items-center justify-end gap-4">
-      <div class="h-full w-full bg-gray-200" @click="seekAudio">
-        <div
-          :style="{ width: progressPercentage + '%' }"
-          class="pointer-events-none h-full bg-green-800"
-        ></div>
+
+    <div class="flex h-12 basis-1/3 items-center justify-between gap-4 [&>*]:flex-1">
+      <div>{{ currentTrackTitle }}</div>
+      <div class="flex justify-center gap-2">
+        <button
+          class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
+          @click="prevTrack"
+        >
+          &lt;
+        </button>
+        <button
+          class="h-full w-23 cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
+          @click="toggleAudio"
+        >
+          {{ audioContext.state === 'suspended' ? 'play' : 'pause' }}
+        </button>
+        <button
+          class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
+          @click="nextTrack"
+        >
+          &gt;
+        </button>
       </div>
+      <input type="range" id="volume" min="0" max="1.2" v-model="rangeValue" step="0.01" />
+    </div>
+    <div class="flex justify-between">
       <div>{{ formatTime(elapsed) }}</div>
       <div>{{ formatTime(audioBuffer.duration) }}</div>
-      <div>{{ rangeValue }}</div>
-      <input type="range" id="volume" min="0" max="2" v-model="rangeValue" step="0.01" />
-      <button
-        class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
-        @click="prevTrack"
-      >
-        &lt;
-      </button>
-      <button
-        class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
-        @click="toggleAudio"
-      >
-        {{ audioContext.state === 'suspended' ? 'play' : 'pause' }}
-      </button>
-      <button
-        class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
-        @click="nextTrack"
-      >
-        &gt;
-      </button>
     </div>
+    <div class="flex h-4 w-full bg-gray-200" @click="seekAudio">
+      <div
+        :style="{ width: progressPercentage + '%' }"
+        class="pointer-events-none h-full bg-green-800"
+      ></div>
+    </div>
+
     <div class="mt-6 flex gap-8 bg-gray-300 p-10">
       <SpectrumVisualizer :analyser />
       <WaveformVisualizer :analyser />
