@@ -214,7 +214,7 @@ onMounted(() => {
         ></div>
       </div>
 
-      <div class="mt-6 flex hidden gap-8 bg-gray-300 p-10">
+      <div class="mt-6 hidden gap-8 bg-gray-300 p-10">
         <SpectrumVisualizer :analyser />
         <WaveformVisualizer :analyser />
       </div>
