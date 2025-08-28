@@ -167,9 +167,12 @@ onMounted(() => {
       </div>
 
       <div class="px-2">
-        <div class="flex h-12 basis-1/3 items-center justify-between gap-4 [&>*]:flex-1">
-          <div>{{ currentTrackTitle }}</div>
-          <div class="flex justify-center gap-2">
+        <div class="flex h-20 basis-1/3 items-center justify-between gap-4 [&>*]:flex-1">
+          <div class="flex h-full flex-col">
+            <div class="mt-6">{{ currentTrackTitle }}</div>
+            <div class="mt-auto text-sm">{{ formatTime(elapsed) }}</div>
+          </div>
+          <div class="flex h-2/3 justify-center gap-2">
             <button
               class="cursor-pointer rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-3 py-1 text-sm hover:bg-gray-400"
               @click="prevTrack"
@@ -189,9 +192,9 @@ onMounted(() => {
               &gt;
             </button>
           </div>
-          <div class="text-right">
+          <div class="flex h-full flex-col items-end text-right">
             <input
-              class="max-w-7/8"
+              class="mt-8 max-w-7/8"
               type="range"
               id="volume"
               min="0"
@@ -199,11 +202,8 @@ onMounted(() => {
               v-model="rangeValue"
               step="0.01"
             />
+            <div class="mt-auto text-sm">{{ formatTime(audioBuffer.duration) }}</div>
           </div>
-        </div>
-        <div class="flex justify-between">
-          <div>{{ formatTime(elapsed) }}</div>
-          <div>{{ formatTime(audioBuffer.duration) }}</div>
         </div>
       </div>
 
