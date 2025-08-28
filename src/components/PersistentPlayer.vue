@@ -11,6 +11,8 @@ const progressPercentage = ref(0)
 
 const rangeValue = ref(1)
 
+const playlistVisible = ref(false)
+
 let firstPlay = true
 
 const audioContext = new window.AudioContext()
@@ -71,14 +73,16 @@ const playAudio = (index: number) => {
   requestAnimationFrame(updateProgressBar)
 }
 
-playAudio(0)
-
 const toggleAudio = () => {
   if (audioContext.state === 'suspended') {
     audioContext.resume()
   } else {
     audioContext.suspend()
   }
+}
+
+const openPlaylist = () => {
+  playlistVisible.value = !playlistVisible.value
 }
 
 const playlistClick = (index: number) => {
@@ -148,25 +152,28 @@ onMounted(() => {
       false,
     )
   }
+  playAudio(0)
 })
 </script>
 
 <template>
   <div class="mb-8">
     <section class="w-full shrink-0">
-      <div class="my-4 hidden bg-gray-400 p-4">
-        <div
-          class="hover:underline"
-          v-for="(track, index) in audioData.map((track) => track.title)"
-          :key="track"
-          @click="playlistClick(index)"
-        >
-          {{ index + 1 }}. {{ track }}
-          {{ index == trackIndex ? '*' : '' }}
+      <Teleport to="body" v-if="playlistVisible">
+        <div class="absolute z-0 flex h-full w-full flex-col bg-gray-100 p-30">
+          <a
+            href="#"
+            class="block border-b-1 border-gray-400 px-1 py-2 hover:bg-gray-200"
+            v-for="(track, index) in audioData.map((track) => track.title)"
+            :key="track"
+            @click="playlistClick(index)"
+          >
+            <span class="mr-1 text-xs font-bold">{{ index + 1 }}.</span> {{ track }}
+            {{ index == trackIndex ? '*' : '' }}
+          </a>
         </div>
-      </div>
-
-      <div class="">
+      </Teleport>
+      <div class="relative z-10">
         <div class="flex h-20 basis-1/3 items-center justify-between gap-4 [&>*]:flex-1">
           <div class="flex h-full flex-col">
             <div class="mt-5 text-xl font-bold">
@@ -189,7 +196,7 @@ onMounted(() => {
               <svg
                 v-if="audioContext.state === 'suspended'"
                 xmlns="http://www.w3.org/2000/svg"
-                class="absolute top-[17px] right-0 left-1 mr-auto ml-auto h-6 w-6"
+                class="absolute top-[15px] right-0 left-1 mr-auto ml-auto h-6 w-6"
                 viewBox="0 0 512 512"
               >
                 <path
@@ -199,7 +206,7 @@ onMounted(() => {
               <svg
                 v-if="audioContext.state !== 'suspended'"
                 xmlns="http://www.w3.org/2000/svg"
-                class="absolute top-[17.5px] right-0 left-0 mr-auto ml-auto h-6 w-6"
+                class="absolute top-[15.5px] right-0 left-0 mr-auto ml-auto h-6 w-6"
                 viewBox="0 0 512 512"
               >
                 <path
@@ -215,6 +222,12 @@ onMounted(() => {
             </button>
           </div>
           <div class="flex h-full flex-col items-end px-2 text-right">
+            <button
+              class="mt-1 aspect-square rotate-[211deg] cursor-pointer rounded-full px-3 py-1 text-sm hover:bg-gray-400"
+              @click="openPlaylist"
+            >
+              &#9664;
+            </button>
             <input
               class="mt-8 max-w-7/8 px-2"
               type="range"
@@ -226,20 +239,18 @@ onMounted(() => {
             />
           </div>
         </div>
-      </div>
-      <div class="text-xs font-bold tabular-nums">
-        {{ formatTime(elapsed) }} / {{ formatTime(audioBuffer.duration) }}
-      </div>
-
-      <div class="mt-1 opacity-80 hover:opacity-100">
-        <div class="flex h-4 w-full bg-gray-100" @click="seekAudio">
-          <div
-            :style="{ width: progressPercentage + '%' }"
-            class="pointer-events-none h-full bg-green-800"
-          ></div>
+        <div class="text-xs font-bold tabular-nums">
+          {{ formatTime(elapsed) }} / {{ formatTime(audioBuffer.duration) }}
+        </div>
+        <div class="mt-1 opacity-80 hover:opacity-100">
+          <div class="flex h-4 w-full bg-gray-100" @click="seekAudio">
+            <div
+              :style="{ width: progressPercentage + '%' }"
+              class="pointer-events-none h-full bg-green-800"
+            ></div>
+          </div>
         </div>
       </div>
-
       <div class="mt-6 hidden gap-8 bg-gray-900 p-10">
         <SpectrumVisualizer :analyser />
         <WaveformVisualizer :analyser />
