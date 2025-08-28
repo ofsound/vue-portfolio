@@ -152,7 +152,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="px-12">
+  <div class="mb-8 px-12">
     <section class="w-full shrink-0 border-1 border-gray-300">
       <div class="my-4 hidden bg-gray-400 p-4">
         <div
