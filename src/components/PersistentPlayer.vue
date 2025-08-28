@@ -96,11 +96,6 @@ const seekAudio = (event: MouseEvent) => {
   startTime = audioContext.currentTime - startOffset
 }
 
-const playlistClick = (index: number) => {
-  armedIndex.value = index
-  playAudio(index)
-}
-
 const handleTransportClick = (type: string) => {
   switch (type) {
     case 'prev':
@@ -127,6 +122,11 @@ const handleTransportClick = (type: string) => {
   }
 }
 
+const playlistClick = (index: number) => {
+  armedIndex.value = index
+  playAudio(index)
+}
+
 const updateProgressBar = () => {
   elapsed.value = audioContext.currentTime - startTime
   progressPercentage.value = (elapsed.value / audioBuffer.duration) * 100
@@ -148,7 +148,6 @@ watch(volumeInputValue, () => {
 
 onMounted(() => {
   audioContext.addEventListener('statechange', handleAudioContextStateChange)
-  playAudio(0)
 })
 </script>
 
