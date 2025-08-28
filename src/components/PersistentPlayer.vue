@@ -1,47 +1,46 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 import { formatTime } from '@/utils/MathUtils.ts'
 
 import SinglePlaylist from '@/components/player/SinglePlaylist.vue'
 import PlayerTransport from '@/components/player/PlayerTransport.vue'
-
 import SpectrumVisualizer from '@/components/player/SpectrumVisualizer.vue'
 import WaveformVisualizer from '@/components/player/WaveformVisualizer.vue'
 
-let startTime = 0
-const armedIndex = ref(0)
-const elapsed = ref(0)
-const progressPercentage = ref(0)
+const trackData = [
+  { title: 'Ghost Camels', file: '01.mp3' },
+  { title: 'Abu Rawash', file: '02.mp3' },
+  { title: 'Get Thee Behind Me', file: '03.mp3' },
+]
 
-const volumeInputValue = ref(1)
-const playlistVisible = ref(false)
+let firstPlay = true
 
 const audioContextState = ref('running')
 const isRunning = ref(true)
 
-const volumeControlInput = ref<HTMLInputElement | null>(null)
+const armedIndex = ref(0)
 
-let firstPlay = true
+let startTime = 0
+const elapsed = ref(0)
+const progressPercentage = ref(0)
+
+const volumeInputValue = ref(1)
+
+const playlistVisible = ref(false)
 
 const audioContext = new window.AudioContext()
 let source = audioContext.createBufferSource()
-const gainNode = audioContext.createGain()
-const analyser = audioContext.createAnalyser()
-
-analyser.fftSize = 256
-
 let audioBuffer: AudioBuffer = new AudioBuffer({
   numberOfChannels: 2,
   length: audioContext.sampleRate * 0.5,
   sampleRate: audioContext.sampleRate,
 })
 
-const audioData = [
-  { title: 'Ghost Camels', file: '01.mp3' },
-  { title: 'Abu Rawash', file: '02.mp3' },
-  { title: 'Get Thee Behind Me', file: '03.mp3' },
-]
+const gainNode = audioContext.createGain()
+
+const analyser = audioContext.createAnalyser()
+analyser.fftSize = 256
 
 async function loadAudioBuffers(fileNames: Array<string>) {
   const buffers = await Promise.all(
@@ -59,47 +58,7 @@ async function loadAudioBuffers(fileNames: Array<string>) {
   return buffers.filter((buffer) => buffer !== null)
 }
 
-const buffers = await loadAudioBuffers(audioData.map((track) => track.file))
-
-const currentTrackTitle = computed(() => {
-  const thisObject = audioData[armedIndex.value]
-  if (thisObject) {
-    return thisObject.title
-  } else {
-    return 'none'
-  }
-})
-
-const playlistClick = (index: number) => {
-  armedIndex.value = index
-  playAudio(index)
-}
-
-const handleTransportClick = (type: string) => {
-  switch (type) {
-    case 'prev':
-      if (armedIndex.value > 0) {
-        armedIndex.value--
-        playAudio(armedIndex.value)
-      }
-      break
-    case 'playPause':
-      if (audioContextState.value === 'running') {
-        audioContext.suspend()
-      } else {
-        audioContext.resume()
-      }
-      break
-    case 'next':
-      if (armedIndex.value < audioData.length - 1) {
-        armedIndex.value++
-        playAudio(armedIndex.value)
-      }
-      break
-    default:
-      break
-  }
-}
+const buffers = await loadAudioBuffers(trackData.map((track) => track.file))
 
 const playAudio = (index: number) => {
   if (source && !firstPlay) {
@@ -137,6 +96,37 @@ const seekAudio = (event: MouseEvent) => {
   startTime = audioContext.currentTime - startOffset
 }
 
+const playlistClick = (index: number) => {
+  armedIndex.value = index
+  playAudio(index)
+}
+
+const handleTransportClick = (type: string) => {
+  switch (type) {
+    case 'prev':
+      if (armedIndex.value > 0) {
+        armedIndex.value--
+        playAudio(armedIndex.value)
+      }
+      break
+    case 'playPause':
+      if (audioContextState.value === 'running') {
+        audioContext.suspend()
+      } else {
+        audioContext.resume()
+      }
+      break
+    case 'next':
+      if (armedIndex.value < trackData.length - 1) {
+        armedIndex.value++
+        playAudio(armedIndex.value)
+      }
+      break
+    default:
+      break
+  }
+}
+
 const updateProgressBar = () => {
   elapsed.value = audioContext.currentTime - startTime
   progressPercentage.value = (elapsed.value / audioBuffer.duration) * 100
@@ -165,7 +155,7 @@ onMounted(() => {
 <template>
   <SinglePlaylist
     :armedIndex
-    :titles="audioData.map((track) => track.title)"
+    :titles="trackData.map((track) => track.title)"
     v-if="playlistVisible"
     @trackClicked="playlistClick"
   />
@@ -173,7 +163,7 @@ onMounted(() => {
     <div class="flex h-20 basis-1/3 items-center justify-between gap-4 [&>*]:flex-1">
       <div class="mt-5 text-xl font-bold">
         <div class="border-0 border-b-2 border-gray-300 px-1 py-1">
-          {{ currentTrackTitle }}
+          {{ trackData[armedIndex]?.title }}
         </div>
       </div>
       <PlayerTransport @transportClicked="handleTransportClick" :isRunning />
@@ -185,7 +175,6 @@ onMounted(() => {
           &#9664;
         </button>
         <input
-          ref="volumeControlInput"
           class="mt-8 max-w-7/8 px-2"
           type="range"
           id="volume"
