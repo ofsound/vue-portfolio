@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 
-import { formatTime } from '@/utils/MathUtils.ts'
-
 import SinglePlaylist from '@/components/player/SinglePlaylist.vue'
 import PlayerTransport from '@/components/player/PlayerTransport.vue'
 import SpectrumVisualizer from '@/components/player/SpectrumVisualizer.vue'
 import WaveformVisualizer from '@/components/player/WaveformVisualizer.vue'
+
+import { formatTime } from '@/utils/MathUtils.ts'
 
 const trackData = [
   { title: 'Ghost Camels', file: '01.mp3' },

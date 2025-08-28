@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+
 import SinglePhysics from '@/components/SinglePhysics.vue'
 
 import { getRandomIntInc } from '@/utils/MathUtils.ts'
@@ -25,9 +26,9 @@ const classPool = [
   'scale-200',
 ]
 
-const recursionDepth = 6
-const itemsPerGroup = 3
-const classesPerLayer = 3
+const recursionDepth = 3
+const itemsPerGroup = 5
+const classesPerLayer = 6
 
 for (let i = 0; i < recursionDepth + 1; i++) {
   const object: StyleObject = {
