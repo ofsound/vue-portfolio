@@ -10,7 +10,5 @@ import SiteNav from '@/components/SiteNav.vue'
   <main class="my-4 w-full grow-1 overflow-auto border-4 border-gray-100 px-4 py-4">
     <RouterView />
   </main>
-  <Suspense>
-    <PersistentPlayer />
-  </Suspense>
+  <PersistentPlayer />
 </template>
