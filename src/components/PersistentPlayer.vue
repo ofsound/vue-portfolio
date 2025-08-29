@@ -31,11 +31,21 @@ const volumeInputValue = ref(1)
 const playlistVisible = ref(false)
 
 const audioContext = new window.AudioContext()
-const buffersReady = ref(false)
+const buffersLoaded = ref(false)
 const isRunning = ref(false)
 
-const { loadBuffers, armAudio, startAudio, getDuration, getAnalyser, setSeekedAudio, setGain } =
-  useAudioContext(audioContext, buffersReady, isRunning)
+const {
+  loadBuffers,
+  armAudio,
+  startAudio,
+  getDuration,
+  getCurrentTime,
+  getAnalyser,
+  setSeekedAudio,
+  setGain,
+  suspendContext,
+  resumeContext,
+} = useAudioContext(audioContext, buffersLoaded, isRunning)
 
 const playlistClick = (index: number) => {
   armedIndex.value = index
@@ -54,12 +64,12 @@ const handleTransportClick = (type: string) => {
       if (isFirstPlay) {
         isFirstPlay = false
         startTrack(armedIndex.value)
-        audioContext.resume()
+        resumeContext()
       } else {
-        if (audioContext.state === 'running') {
-          audioContext.suspend()
+        if (isRunning.value) {
+          suspendContext()
         } else {
-          audioContext.resume()
+          resumeContext()
         }
       }
       break
@@ -76,8 +86,18 @@ const startTrack = (index: number) => {
   armAudio(index)
   startAudio()
   updateDuration()
-  startTime = audioContext.currentTime
+  startTime = getCurrentTime()
   requestAnimationFrame(updateProgressBar)
+}
+
+const seekAudio = (event: MouseEvent) => {
+  const clickedElement = event.target as HTMLElement
+  const offsetX = event.offsetX
+  const startOffset = duration.value * (offsetX / clickedElement.clientWidth)
+
+  setSeekedAudio(startOffset)
+  updateDuration()
+  startTime = getCurrentTime() - startOffset
 }
 
 const updateDuration = () => {
@@ -88,24 +108,14 @@ watch(volumeInputValue, () => {
   setGain(volumeInputValue.value)
 })
 
-const seekAudio = (event: MouseEvent) => {
-  const clickedElement = event.target as HTMLElement
-  const offsetX = event.offsetX
-  const startOffset = duration.value * (offsetX / clickedElement.clientWidth)
-
-  setSeekedAudio(startOffset)
-  updateDuration()
-  startTime = audioContext.currentTime - startOffset
-}
-
-watch(buffersReady, () => {
+watch(buffersLoaded, () => {
   armAudio(0)
   updateDuration()
-  audioContext.suspend()
+  suspendContext()
 })
 
 const updateProgressBar = () => {
-  elapsed.value = audioContext.currentTime - startTime
+  elapsed.value = getCurrentTime() - startTime
   progressPercentage.value = (elapsed.value / duration.value) * 100
   requestAnimationFrame(updateProgressBar)
 }

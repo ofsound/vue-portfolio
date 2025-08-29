@@ -64,6 +64,10 @@ export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolea
     return audioBuffer.duration
   }
 
+  const getCurrentTime = (): number => {
+    return audioContext.currentTime
+  }
+
   const getAnalyser = (): AnalyserNode => {
     return analyser
   }
@@ -72,12 +76,18 @@ export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolea
     gainNode.gain.value = newGain
   }
 
-  const setSeekedAudio = (startOffset: number) => {
+  const suspendContext = () => {
+    audioContext.suspend()
+  }
 
+  const resumeContext = () => {
+    audioContext.resume()
+  }
+
+  const setSeekedAudio = (startOffset: number) => {
     if (source && sourceHasStarted) {
       source.stop()
     }
-
     source = audioContext.createBufferSource()
     source.buffer = audioBuffer
     source.connect(gainNode).connect(audioContext.destination)
@@ -94,15 +104,16 @@ export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolea
 
   audioContext.addEventListener('statechange', handleAudioContextStateChange)
 
-
-
   return {
     getDuration,
+    getCurrentTime,
     loadBuffers,
     armAudio,
     startAudio,
     setSeekedAudio,
     setGain,
-    getAnalyser
+    getAnalyser,
+    suspendContext,
+    resumeContext
   }
 }
