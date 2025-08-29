@@ -37,11 +37,12 @@ const playlistVisible = ref(false)
 
 const audioContext = new window.AudioContext()
 
-const { loadBuffers, armAudio, startAudio, getDuration, getAnalyser, seekAudio, setGain } =
+const { loadBuffers, armAudio, startAudio, getDuration, getAnalyser, setSeekedAudio, setGain } =
   useAudioContext(audioContext, isLoaded)
 
 loadBuffers(trackData.map((track) => track.file))
 
+// probably cleaner as separate handlers
 const handleTransportClick = (type: string) => {
   switch (type) {
     case 'prev':
@@ -106,6 +107,16 @@ const updateProgressBar = () => {
   elapsed.value = audioContext.currentTime - startTime
   progressPercentage.value = (elapsed.value / duration.value) * 100
   requestAnimationFrame(updateProgressBar)
+}
+
+const seekAudio = (event: MouseEvent) => {
+  const clickedElement = event.target as HTMLElement
+  const offsetX = event.offsetX
+  const startOffset = duration.value * (offsetX / clickedElement.clientWidth)
+
+  setSeekedAudio(startOffset)
+  updateDuration()
+  startTime = audioContext.currentTime - startOffset
 }
 
 onMounted(() => {

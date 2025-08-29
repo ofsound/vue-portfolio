@@ -2,7 +2,7 @@ import type { Ref } from 'vue';
 
 export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolean>) {
 
-  const isFirstPlay = true;
+  let sourceHasStarted = false
 
   let source = audioContext.createBufferSource()
   let audioBuffer: AudioBuffer = new AudioBuffer({
@@ -42,7 +42,7 @@ export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolea
 
   const armAudio = (index: number) => {
 
-    if (source && !isFirstPlay) {
+    if (source && sourceHasStarted) {
       source.stop()
     }
 
@@ -57,6 +57,7 @@ export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolea
 
   const startAudio = () => {
     source.start(0)
+    sourceHasStarted = true
   }
 
   const getDuration = (): number => {
@@ -71,22 +72,16 @@ export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolea
     gainNode.gain.value = newGain
   }
 
-  const seekAudio = (event: MouseEvent) => {
+  const setSeekedAudio = (startOffset: number) => {
 
-
-    if (source) {
+    if (source && sourceHasStarted) {
       source.stop()
     }
-    const clickedElement = event.target as HTMLElement
-    const offsetX = event.offsetX
-    const startOffset = audioBuffer.duration * (offsetX / clickedElement.clientWidth)
 
     source = audioContext.createBufferSource()
     source.buffer = audioBuffer
     source.connect(gainNode).connect(audioContext.destination)
     source.start(0, startOffset)
-
-    alert(startOffset)
   }
 
   return {
@@ -94,7 +89,7 @@ export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolea
     loadBuffers,
     armAudio,
     startAudio,
-    seekAudio,
+    setSeekedAudio,
     setGain,
     getAnalyser
   }
