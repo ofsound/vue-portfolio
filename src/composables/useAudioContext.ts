@@ -1,6 +1,8 @@
-export function useAudioContext(audioContext: AudioContext) {
+import type { Ref } from 'vue';
 
-  let isFirstPlay = true;
+export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolean>) {
+
+  const isFirstPlay = true;
 
   let source = audioContext.createBufferSource()
   let audioBuffer: AudioBuffer = new AudioBuffer({
@@ -21,6 +23,7 @@ export function useAudioContext(audioContext: AudioContext) {
           const response = await fetch(`${file}`)
           const arrayBuffer = await response.arrayBuffer()
           return audioContext.decodeAudioData(arrayBuffer)
+
         } catch (error) {
           console.error(`Error loading or decoding ${file}:`, error)
           return null
@@ -34,19 +37,21 @@ export function useAudioContext(audioContext: AudioContext) {
 
   const loadBuffers = async (fileNames: Array<string>) => {
     buffers = await loadAudioBuffers(fileNames)
+    isLoaded.value = true
   }
 
   const armAudio = (index: number) => {
+
     if (source && !isFirstPlay) {
       source.stop()
     }
-    isFirstPlay = false
 
     source = audioContext.createBufferSource()
     if (buffers[index]) {
       source.buffer = buffers[index]
       audioBuffer = buffers[index]
     }
+
     source.connect(gainNode).connect(analyser).connect(audioContext.destination)
   }
 
@@ -67,6 +72,8 @@ export function useAudioContext(audioContext: AudioContext) {
   }
 
   const seekAudio = (event: MouseEvent) => {
+
+
     if (source) {
       source.stop()
     }
@@ -78,6 +85,8 @@ export function useAudioContext(audioContext: AudioContext) {
     source.buffer = audioBuffer
     source.connect(gainNode).connect(audioContext.destination)
     source.start(0, startOffset)
+
+    alert(startOffset)
   }
 
   return {

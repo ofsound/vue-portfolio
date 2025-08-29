@@ -16,10 +16,13 @@ const trackData = [
   { title: 'Get Thee Behind Me', file: '03.mp3' },
 ]
 
-let startTime = 0
-const elapsed = ref(0)
+const isLoaded = ref(false)
 
 let isFirstPlay = true
+
+let startTime = 0
+const elapsed = ref(0)
+const duration = ref(0)
 
 const audioContextState = ref()
 const isRunning = ref(false)
@@ -35,7 +38,7 @@ const playlistVisible = ref(false)
 const audioContext = new window.AudioContext()
 
 const { loadBuffers, armAudio, startAudio, getDuration, getAnalyser, seekAudio, setGain } =
-  useAudioContext(audioContext)
+  useAudioContext(audioContext, isLoaded)
 
 loadBuffers(trackData.map((track) => track.file))
 
@@ -44,39 +47,44 @@ const handleTransportClick = (type: string) => {
     case 'prev':
       if (armedIndex.value > 0) {
         armedIndex.value--
-        armAudio(armedIndex.value)
-        startAudio()
-        startTime = audioContext.currentTime
-        requestAnimationFrame(updateProgressBar)
+        startTrack(armedIndex.value)
       }
       break
     case 'playPause':
       if (isFirstPlay) {
         isFirstPlay = false
-        startAudio()
-        startTime = audioContext.currentTime
-        requestAnimationFrame(updateProgressBar)
+        startTrack(armedIndex.value)
         audioContext.resume()
         break
-      }
-      if (audioContext.state === 'running') {
-        audioContext.suspend()
       } else {
-        audioContext.resume()
+        if (audioContext.state === 'running') {
+          audioContext.suspend()
+        } else {
+          audioContext.resume()
+        }
       }
       break
     case 'next':
       if (armedIndex.value < trackData.length - 1) {
         armedIndex.value++
-        armAudio(armedIndex.value)
-        startAudio()
-        startTime = audioContext.currentTime
-        requestAnimationFrame(updateProgressBar)
+        startTrack(armedIndex.value)
       }
       break
     default:
       break
   }
+}
+
+const startTrack = (index: number) => {
+  armAudio(index)
+  startAudio()
+  updateDuration()
+  startTime = audioContext.currentTime
+  requestAnimationFrame(updateProgressBar)
+}
+
+const updateDuration = () => {
+  duration.value = getDuration()
 }
 
 const playlistClick = (index: number) => {
@@ -88,9 +96,15 @@ watch(volumeInputValue, () => {
   setGain(volumeInputValue.value)
 })
 
+watch(isLoaded, () => {
+  armAudio(0)
+  updateDuration()
+  audioContext.suspend()
+})
+
 const updateProgressBar = () => {
   elapsed.value = audioContext.currentTime - startTime
-  progressPercentage.value = (elapsed.value / getDuration()) * 100
+  progressPercentage.value = (elapsed.value / duration.value) * 100
   requestAnimationFrame(updateProgressBar)
 }
 
@@ -104,8 +118,6 @@ onMounted(() => {
     audioContextState.value = audioContext.state
   }
   audioContext.addEventListener('statechange', handleAudioContextStateChange)
-  armAudio(0)
-  audioContext.suspend()
 })
 </script>
 
@@ -120,6 +132,7 @@ onMounted(() => {
     <div class="flex h-20 basis-1/3 items-center justify-between gap-4 [&>*]:flex-1">
       <div class="mt-5 text-xl font-bold">
         <div class="border-0 border-b-2 border-gray-300 px-1 py-1">
+          {{ isRunning }}
           {{ trackData[armedIndex]?.title }}
         </div>
       </div>
@@ -143,7 +156,7 @@ onMounted(() => {
       </div>
     </div>
     <div class="text-xs font-bold tabular-nums">
-      {{ formatTime(elapsed) }} / {{ formatTime(getDuration()) }}
+      {{ formatTime(elapsed) }} / {{ formatTime(duration) }}
     </div>
     <div class="mt-1 opacity-80 hover:opacity-100">
       <div class="flex h-4 w-full bg-gray-100" @click="seekAudio">
@@ -154,7 +167,7 @@ onMounted(() => {
       </div>
     </div>
   </div>
-  <div class="mt-6 hidden gap-8 bg-gray-900 p-10">
+  <div class="mt-6 flex gap-8 bg-gray-900 p-10">
     <SpectrumVisualizer :analyser="getAnalyser()" />
     <WaveformVisualizer :analyser="getAnalyser()" />
   </div>
