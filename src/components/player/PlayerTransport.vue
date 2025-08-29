@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  isRunning: boolean
+  isPlaying: boolean
 }>()
 const emit = defineEmits(['transportClicked'])
 </script>
@@ -18,7 +18,7 @@ const emit = defineEmits(['transportClicked'])
       @click="emit('transportClicked', 'playPause')"
     >
       <svg
-        v-if="!isRunning"
+        v-if="!isPlaying"
         xmlns="http://www.w3.org/2000/svg"
         class="absolute top-[15px] right-0 left-1 mr-auto ml-auto h-6 w-6"
         viewBox="0 0 512 512"
@@ -28,7 +28,7 @@ const emit = defineEmits(['transportClicked'])
         />
       </svg>
       <svg
-        v-if="isRunning"
+        v-if="isPlaying"
         xmlns="http://www.w3.org/2000/svg"
         class="absolute top-[15.5px] right-0 left-0 mr-auto ml-auto h-6 w-6"
         viewBox="0 0 512 512"

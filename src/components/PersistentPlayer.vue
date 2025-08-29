@@ -10,7 +10,7 @@ import { useAudioContext } from '@/composables/useAudioContext.ts'
 
 import { formatTime } from '@/utils/MathUtils.ts'
 
-const trackData = [
+const tracks = [
   { title: 'Ghost Camels', file: '01.mp3' },
   { title: 'Abu Rawash', file: '02.mp3' },
   { title: 'Get Thee Behind Me', file: '03.mp3' },
@@ -28,24 +28,29 @@ const progressPercentage = ref(0)
 
 const volumeInputValue = ref(1)
 
+const audioContext = new window.AudioContext()
+console.log('initial state', audioContext.state)
+
+const isPlaying = ref(false)
+
 const playlistVisible = ref(false)
 
-const audioContext = new window.AudioContext()
-const buffersLoaded = ref(false)
-const isRunning = ref(false)
+const buffersAreLoaded = () => {
+  armAudio(0)
+  updateDuration()
+}
 
 const {
   loadBuffers,
   armAudio,
   startAudio,
+  togglePlayPause,
+  setSeekedAudio,
+  getAnalyser,
   getDuration,
   getCurrentTime,
-  getAnalyser,
-  setSeekedAudio,
   setGain,
-  suspendContext,
-  resumeContext,
-} = useAudioContext(audioContext, buffersLoaded, isRunning)
+} = useAudioContext(audioContext, isPlaying, buffersAreLoaded)
 
 const playlistClick = (index: number) => {
   armedIndex.value = index
@@ -64,17 +69,12 @@ const handleTransportClick = (type: string) => {
       if (isFirstPlay) {
         isFirstPlay = false
         startTrack(armedIndex.value)
-        resumeContext()
       } else {
-        if (isRunning.value) {
-          suspendContext()
-        } else {
-          resumeContext()
-        }
+        togglePlayPause()
       }
       break
     case 'next':
-      if (armedIndex.value < trackData.length - 1) {
+      if (armedIndex.value < tracks.length - 1) {
         armedIndex.value++
         startTrack(armedIndex.value)
       }
@@ -94,7 +94,6 @@ const seekAudio = (event: MouseEvent) => {
   const clickedElement = event.target as HTMLElement
   const offsetX = event.offsetX
   const startOffset = duration.value * (offsetX / clickedElement.clientWidth)
-
   setSeekedAudio(startOffset)
   updateDuration()
   startTime = getCurrentTime() - startOffset
@@ -108,12 +107,6 @@ watch(volumeInputValue, () => {
   setGain(volumeInputValue.value)
 })
 
-watch(buffersLoaded, () => {
-  armAudio(0)
-  updateDuration()
-  suspendContext()
-})
-
 const updateProgressBar = () => {
   elapsed.value = getCurrentTime() - startTime
   progressPercentage.value = (elapsed.value / duration.value) * 100
@@ -121,14 +114,14 @@ const updateProgressBar = () => {
 }
 
 onMounted(() => {
-  loadBuffers(trackData.map((track) => track.file))
+  loadBuffers(tracks.map((track) => track.file))
 })
 </script>
 
 <template>
   <SinglePlaylist
     :armedIndex
-    :titles="trackData.map((track) => track.title)"
+    :titles="tracks.map((track) => track.title)"
     v-if="playlistVisible"
     @trackClicked="playlistClick"
   />
@@ -136,10 +129,10 @@ onMounted(() => {
     <div class="flex h-20 basis-1/3 items-center justify-between gap-4 [&>*]:flex-1">
       <div class="mt-5 text-xl font-bold">
         <div class="border-0 border-b-2 border-gray-300 px-1 py-1">
-          {{ trackData[armedIndex]?.title }}
+          {{ tracks[armedIndex]?.title }}
         </div>
       </div>
-      <PlayerTransport @transportClicked="handleTransportClick" :isRunning />
+      <PlayerTransport @transportClicked="handleTransportClick" :isPlaying />
       <div class="flex h-full flex-col items-end px-2 text-right">
         <button
           class="mt-1 aspect-square rotate-[211deg] cursor-pointer rounded-full bg-gray-200 px-3 py-1 text-sm hover:bg-gray-400"

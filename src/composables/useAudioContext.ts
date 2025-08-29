@@ -1,6 +1,8 @@
 import type { Ref } from 'vue';
 
-export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolean>, isRunning: Ref<boolean>) {
+export function useAudioContext(audioContext: AudioContext, isPlaying: Ref<boolean>, buffersAreLoaded: () => void) {
+
+  audioContext.suspend()
 
   let sourceHasStarted = false
 
@@ -23,7 +25,6 @@ export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolea
           const response = await fetch(`${file}`)
           const arrayBuffer = await response.arrayBuffer()
           return audioContext.decodeAudioData(arrayBuffer)
-
         } catch (error) {
           console.error(`Error loading or decoding ${file}:`, error)
           return null
@@ -37,16 +38,16 @@ export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolea
 
   const loadBuffers = async (fileNames: Array<string>) => {
     buffers = await loadAudioBuffers(fileNames)
-    isLoaded.value = true
+    buffersAreLoaded()
   }
 
   const armAudio = (index: number) => {
-
     if (source && sourceHasStarted) {
       source.stop()
     }
 
     source = audioContext.createBufferSource()
+
     if (buffers[index]) {
       source.buffer = buffers[index]
       audioBuffer = buffers[index]
@@ -58,7 +59,37 @@ export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolea
   const startAudio = () => {
     source.start(0)
     sourceHasStarted = true
+    if (!isPlaying.value) {
+      audioContext.resume()
+    }
   }
+
+  const togglePlayPause = () => {
+    if (isPlaying.value) {
+      audioContext.suspend()
+    } else {
+      audioContext.resume()
+    }
+  }
+  const setSeekedAudio = (startOffset: number) => {
+    if (source && sourceHasStarted) {
+      source.stop()
+    }
+    source = audioContext.createBufferSource()
+    source.buffer = audioBuffer
+    source.connect(gainNode).connect(audioContext.destination)
+    source.start(0, startOffset)
+  }
+
+  const handleAudioContextStateChange = () => {
+    if (audioContext.state === 'running') {
+      isPlaying.value = true
+    } else {
+      isPlaying.value = false
+    }
+  }
+
+  audioContext.addEventListener('statechange', handleAudioContextStateChange)
 
   const getDuration = (): number => {
     return audioBuffer.duration
@@ -76,44 +107,16 @@ export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolea
     gainNode.gain.value = newGain
   }
 
-  const suspendContext = () => {
-    audioContext.suspend()
-  }
-
-  const resumeContext = () => {
-    audioContext.resume()
-  }
-
-  const setSeekedAudio = (startOffset: number) => {
-    if (source && sourceHasStarted) {
-      source.stop()
-    }
-    source = audioContext.createBufferSource()
-    source.buffer = audioBuffer
-    source.connect(gainNode).connect(audioContext.destination)
-    source.start(0, startOffset)
-  }
-
-  const handleAudioContextStateChange = () => {
-    if (audioContext.state === 'running') {
-      isRunning.value = true
-    } else {
-      isRunning.value = false
-    }
-  }
-
-  audioContext.addEventListener('statechange', handleAudioContextStateChange)
 
   return {
-    getDuration,
-    getCurrentTime,
     loadBuffers,
     armAudio,
     startAudio,
+    togglePlayPause,
     setSeekedAudio,
-    setGain,
     getAnalyser,
-    suspendContext,
-    resumeContext
+    getDuration,
+    getCurrentTime,
+    setGain,
   }
 }
