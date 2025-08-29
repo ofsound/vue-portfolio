@@ -132,7 +132,6 @@ onMounted(() => {
     <div class="flex h-20 basis-1/3 items-center justify-between gap-4 [&>*]:flex-1">
       <div class="mt-5 text-xl font-bold">
         <div class="border-0 border-b-2 border-gray-300 px-1 py-1">
-          {{ isRunning }}
           {{ trackData[armedIndex]?.title }}
         </div>
       </div>
@@ -167,7 +166,7 @@ onMounted(() => {
       </div>
     </div>
   </div>
-  <div class="mt-6 flex gap-8 bg-gray-900 p-10">
+  <div class="mt-6 hidden gap-8 bg-gray-900 p-10">
     <SpectrumVisualizer :analyser="getAnalyser()" />
     <WaveformVisualizer :analyser="getAnalyser()" />
   </div>
