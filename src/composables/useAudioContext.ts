@@ -1,6 +1,6 @@
 import type { Ref } from 'vue';
 
-export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolean>) {
+export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolean>, isRunning: Ref<boolean>) {
 
   let sourceHasStarted = false
 
@@ -83,6 +83,18 @@ export function useAudioContext(audioContext: AudioContext, isLoaded: Ref<boolea
     source.connect(gainNode).connect(audioContext.destination)
     source.start(0, startOffset)
   }
+
+  const handleAudioContextStateChange = () => {
+    if (audioContext.state === 'running') {
+      isRunning.value = true
+    } else {
+      isRunning.value = false
+    }
+  }
+
+  audioContext.addEventListener('statechange', handleAudioContextStateChange)
+
+
 
   return {
     getDuration,

@@ -16,16 +16,11 @@ const trackData = [
   { title: 'Get Thee Behind Me', file: '03.mp3' },
 ]
 
-const isLoaded = ref(false)
-
 let isFirstPlay = true
 
 let startTime = 0
 const elapsed = ref(0)
 const duration = ref(0)
-
-const audioContextState = ref()
-const isRunning = ref(false)
 
 const armedIndex = ref(0)
 
@@ -36,13 +31,17 @@ const volumeInputValue = ref(1)
 const playlistVisible = ref(false)
 
 const audioContext = new window.AudioContext()
+const buffersReady = ref(false)
+const isRunning = ref(false)
 
 const { loadBuffers, armAudio, startAudio, getDuration, getAnalyser, setSeekedAudio, setGain } =
-  useAudioContext(audioContext, isLoaded)
+  useAudioContext(audioContext, buffersReady, isRunning)
 
-loadBuffers(trackData.map((track) => track.file))
+const playlistClick = (index: number) => {
+  armedIndex.value = index
+  startTrack(index)
+}
 
-// probably cleaner as separate handlers
 const handleTransportClick = (type: string) => {
   switch (type) {
     case 'prev':
@@ -56,7 +55,6 @@ const handleTransportClick = (type: string) => {
         isFirstPlay = false
         startTrack(armedIndex.value)
         audioContext.resume()
-        break
       } else {
         if (audioContext.state === 'running') {
           audioContext.suspend()
@@ -70,8 +68,6 @@ const handleTransportClick = (type: string) => {
         armedIndex.value++
         startTrack(armedIndex.value)
       }
-      break
-    default:
       break
   }
 }
@@ -88,26 +84,9 @@ const updateDuration = () => {
   duration.value = getDuration()
 }
 
-const playlistClick = (index: number) => {
-  armedIndex.value = index
-  armAudio(index)
-}
-
 watch(volumeInputValue, () => {
   setGain(volumeInputValue.value)
 })
-
-watch(isLoaded, () => {
-  armAudio(0)
-  updateDuration()
-  audioContext.suspend()
-})
-
-const updateProgressBar = () => {
-  elapsed.value = audioContext.currentTime - startTime
-  progressPercentage.value = (elapsed.value / duration.value) * 100
-  requestAnimationFrame(updateProgressBar)
-}
 
 const seekAudio = (event: MouseEvent) => {
   const clickedElement = event.target as HTMLElement
@@ -119,16 +98,20 @@ const seekAudio = (event: MouseEvent) => {
   startTime = audioContext.currentTime - startOffset
 }
 
+watch(buffersReady, () => {
+  armAudio(0)
+  updateDuration()
+  audioContext.suspend()
+})
+
+const updateProgressBar = () => {
+  elapsed.value = audioContext.currentTime - startTime
+  progressPercentage.value = (elapsed.value / duration.value) * 100
+  requestAnimationFrame(updateProgressBar)
+}
+
 onMounted(() => {
-  const handleAudioContextStateChange = () => {
-    if (audioContext.state === 'running') {
-      isRunning.value = true
-    } else {
-      isRunning.value = false
-    }
-    audioContextState.value = audioContext.state
-  }
-  audioContext.addEventListener('statechange', handleAudioContextStateChange)
+  loadBuffers(trackData.map((track) => track.file))
 })
 </script>
 
