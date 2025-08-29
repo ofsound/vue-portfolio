@@ -1,13 +1,13 @@
 <script setup lang="ts">
 const props = defineProps<{
-  armedIndex: number
+  currentIndex: number
   titles: string[]
 }>()
 
 const emit = defineEmits(['trackClicked'])
 
 const isArmed = (index: number): string => {
-  if (props.armedIndex === index) {
+  if (props.currentIndex === index) {
     return ''
   } else {
     return 'bg-[repeating-linear-gradient(45deg,_#e1e1e1_0,_#e1e1e1_1px,_transparent_0,_transparent_50%)] bg-[size:10px_10px] bg-fixed text-gray-400'

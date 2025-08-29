@@ -22,7 +22,7 @@ let startTime = 0
 const elapsed = ref(0)
 const duration = ref(0)
 
-const armedIndex = ref(0)
+const currentIndex = ref(0)
 
 const progressPercentage = ref(0)
 
@@ -53,30 +53,30 @@ const {
 } = useAudioContext(audioContext, isPlaying, buffersAreLoaded)
 
 const playlistClick = (index: number) => {
-  armedIndex.value = index
+  currentIndex.value = index
   startTrack(index)
 }
 
 const handleTransportClick = (type: string) => {
   switch (type) {
     case 'prev':
-      if (armedIndex.value > 0) {
-        armedIndex.value--
-        startTrack(armedIndex.value)
+      if (currentIndex.value > 0) {
+        currentIndex.value--
+        startTrack(currentIndex.value)
       }
       break
     case 'playPause':
       if (isFirstPlay) {
         isFirstPlay = false
-        startTrack(armedIndex.value)
+        startTrack(currentIndex.value)
       } else {
         togglePlayPause()
       }
       break
     case 'next':
-      if (armedIndex.value < tracks.length - 1) {
-        armedIndex.value++
-        startTrack(armedIndex.value)
+      if (currentIndex.value < tracks.length - 1) {
+        currentIndex.value++
+        startTrack(currentIndex.value)
       }
       break
   }
@@ -120,7 +120,7 @@ onMounted(() => {
 
 <template>
   <SinglePlaylist
-    :armedIndex
+    :currentIndex
     :titles="tracks.map((track) => track.title)"
     v-if="playlistVisible"
     @trackClicked="playlistClick"
@@ -129,7 +129,7 @@ onMounted(() => {
     <div class="flex h-20 basis-1/3 items-center justify-between gap-4 [&>*]:flex-1">
       <div class="mt-5 text-xl font-bold">
         <div class="border-0 border-b-2 border-gray-300 px-1 py-1">
-          {{ tracks[armedIndex]?.title }}
+          {{ tracks[currentIndex]?.title }}
         </div>
       </div>
       <PlayerTransport @transportClicked="handleTransportClick" :isPlaying />
