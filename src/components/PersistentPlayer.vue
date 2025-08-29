@@ -6,6 +6,8 @@ import PlayerTransport from '@/components/player/PlayerTransport.vue'
 import SpectrumVisualizer from '@/components/player/SpectrumVisualizer.vue'
 import WaveformVisualizer from '@/components/player/WaveformVisualizer.vue'
 
+import { useAudioContext } from '@/composables/useAudioContext.ts'
+
 import { formatTime } from '@/utils/MathUtils.ts'
 
 const trackData = [
@@ -14,15 +16,16 @@ const trackData = [
   { title: 'Get Thee Behind Me', file: '03.mp3' },
 ]
 
-let firstPlay = true
+let startTime = 0
+const elapsed = ref(0)
 
-const audioContextState = ref('running')
-const isRunning = ref(true)
+let isFirstPlay = true
+
+const audioContextState = ref()
+const isRunning = ref(false)
 
 const armedIndex = ref(0)
 
-let startTime = 0
-const elapsed = ref(0)
 const progressPercentage = ref(0)
 
 const volumeInputValue = ref(1)
@@ -30,82 +33,33 @@ const volumeInputValue = ref(1)
 const playlistVisible = ref(false)
 
 const audioContext = new window.AudioContext()
-let source = audioContext.createBufferSource()
-let audioBuffer: AudioBuffer = new AudioBuffer({
-  numberOfChannels: 2,
-  length: audioContext.sampleRate * 0.5,
-  sampleRate: audioContext.sampleRate,
-})
 
-const gainNode = audioContext.createGain()
+const { loadBuffers, armAudio, startAudio, getDuration, getAnalyser, seekAudio, setGain } =
+  useAudioContext(audioContext)
 
-const analyser = audioContext.createAnalyser()
-analyser.fftSize = 256
-
-async function loadAudioBuffers(fileNames: Array<string>) {
-  const buffers = await Promise.all(
-    fileNames.map(async (file) => {
-      try {
-        const response = await fetch(`${file}`)
-        const arrayBuffer = await response.arrayBuffer()
-        return audioContext.decodeAudioData(arrayBuffer)
-      } catch (error) {
-        console.error(`Error loading or decoding ${file}:`, error)
-        return null
-      }
-    }),
-  )
-  return buffers.filter((buffer) => buffer !== null)
-}
-
-const buffers = await loadAudioBuffers(trackData.map((track) => track.file))
-
-const playAudio = (index: number) => {
-  if (source && !firstPlay) {
-    source.stop()
-  }
-
-  firstPlay = false
-
-  source = audioContext.createBufferSource()
-  if (buffers[index]) {
-    source.buffer = buffers[index]
-    audioBuffer = buffers[index]
-  }
-
-  source.connect(gainNode).connect(analyser).connect(audioContext.destination)
-  source.start(0)
-
-  startTime = audioContext.currentTime
-  requestAnimationFrame(updateProgressBar)
-}
-
-const seekAudio = (event: MouseEvent) => {
-  if (source) {
-    source.stop()
-  }
-  const clickedElement = event.target as HTMLElement
-  const offsetX = event.offsetX
-  const startOffset = audioBuffer.duration * (offsetX / clickedElement.clientWidth)
-
-  source = audioContext.createBufferSource()
-  source.buffer = audioBuffer
-  source.connect(gainNode).connect(audioContext.destination)
-  source.start(0, startOffset)
-
-  startTime = audioContext.currentTime - startOffset
-}
+loadBuffers(trackData.map((track) => track.file))
 
 const handleTransportClick = (type: string) => {
   switch (type) {
     case 'prev':
       if (armedIndex.value > 0) {
         armedIndex.value--
-        playAudio(armedIndex.value)
+        armAudio(armedIndex.value)
+        startAudio()
+        startTime = audioContext.currentTime
+        requestAnimationFrame(updateProgressBar)
       }
       break
     case 'playPause':
-      if (audioContextState.value === 'running') {
+      if (isFirstPlay) {
+        isFirstPlay = false
+        startAudio()
+        startTime = audioContext.currentTime
+        requestAnimationFrame(updateProgressBar)
+        audioContext.resume()
+        break
+      }
+      if (audioContext.state === 'running') {
         audioContext.suspend()
       } else {
         audioContext.resume()
@@ -114,7 +68,10 @@ const handleTransportClick = (type: string) => {
     case 'next':
       if (armedIndex.value < trackData.length - 1) {
         armedIndex.value++
-        playAudio(armedIndex.value)
+        armAudio(armedIndex.value)
+        startAudio()
+        startTime = audioContext.currentTime
+        requestAnimationFrame(updateProgressBar)
       }
       break
     default:
@@ -124,30 +81,31 @@ const handleTransportClick = (type: string) => {
 
 const playlistClick = (index: number) => {
   armedIndex.value = index
-  playAudio(index)
-}
-
-const updateProgressBar = () => {
-  elapsed.value = audioContext.currentTime - startTime
-  progressPercentage.value = (elapsed.value / audioBuffer.duration) * 100
-  requestAnimationFrame(updateProgressBar)
-}
-
-const handleAudioContextStateChange = () => {
-  if (audioContext.state === 'running') {
-    isRunning.value = true
-  } else {
-    isRunning.value = false
-  }
-  audioContextState.value = audioContext.state
+  armAudio(index)
 }
 
 watch(volumeInputValue, () => {
-  gainNode.gain.value = volumeInputValue.value
+  setGain(volumeInputValue.value)
 })
 
+const updateProgressBar = () => {
+  elapsed.value = audioContext.currentTime - startTime
+  progressPercentage.value = (elapsed.value / getDuration()) * 100
+  requestAnimationFrame(updateProgressBar)
+}
+
 onMounted(() => {
+  const handleAudioContextStateChange = () => {
+    if (audioContext.state === 'running') {
+      isRunning.value = true
+    } else {
+      isRunning.value = false
+    }
+    audioContextState.value = audioContext.state
+  }
   audioContext.addEventListener('statechange', handleAudioContextStateChange)
+  armAudio(0)
+  audioContext.suspend()
 })
 </script>
 
@@ -168,7 +126,7 @@ onMounted(() => {
       <PlayerTransport @transportClicked="handleTransportClick" :isRunning />
       <div class="flex h-full flex-col items-end px-2 text-right">
         <button
-          class="mt-1 aspect-square rotate-[211deg] cursor-pointer rounded-full px-3 py-1 text-sm hover:bg-gray-400"
+          class="mt-1 aspect-square rotate-[211deg] cursor-pointer rounded-full bg-gray-200 px-3 py-1 text-sm hover:bg-gray-400"
           @click="playlistVisible = !playlistVisible"
         >
           &#9664;
@@ -185,7 +143,7 @@ onMounted(() => {
       </div>
     </div>
     <div class="text-xs font-bold tabular-nums">
-      {{ formatTime(elapsed) }} / {{ formatTime(audioBuffer.duration) }}
+      {{ formatTime(elapsed) }} / {{ formatTime(getDuration()) }}
     </div>
     <div class="mt-1 opacity-80 hover:opacity-100">
       <div class="flex h-4 w-full bg-gray-100" @click="seekAudio">
@@ -197,7 +155,7 @@ onMounted(() => {
     </div>
   </div>
   <div class="mt-6 hidden gap-8 bg-gray-900 p-10">
-    <SpectrumVisualizer :analyser />
-    <WaveformVisualizer :analyser />
+    <SpectrumVisualizer :analyser="getAnalyser()" />
+    <WaveformVisualizer :analyser="getAnalyser()" />
   </div>
 </template>
