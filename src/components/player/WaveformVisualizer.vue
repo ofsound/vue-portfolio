@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, useTemplateRef } from 'vue'
 
 const props = defineProps<{
   analyser: AnalyserNode
@@ -10,46 +10,48 @@ const dataArray = new Uint8Array(bufferLength)
 
 let drawVisual = -1
 
+const canvas = useTemplateRef('myCanvas')
+
 onMounted(() => {
-  const canvas = document.getElementById('myCanvas2') as HTMLCanvasElement
-
-  const canvasContext = canvas.getContext('2d')
-
-  if (canvasContext) {
-    canvasContext.clearRect(0, 0, 150, 150)
-  }
-
-  function draw() {
-    drawVisual = requestAnimationFrame(draw)
-
-    props.analyser.getByteFrequencyData(dataArray)
+  if (canvas.value) {
+    const canvasContext = canvas.value.getContext('2d')
 
     if (canvasContext) {
-      canvasContext.fillStyle = 'rgb(0 0 0)'
-      canvasContext.fillRect(0, 0, 150, 150)
+      canvasContext.clearRect(0, 0, 150, 150)
+    }
 
-      const barWidth = (150 / bufferLength) * 2.5
-      let barHeight
-      let x = 0
+    function draw() {
+      drawVisual = requestAnimationFrame(draw)
 
-      for (let i = 0; i < bufferLength; i++) {
-        const thisDataArray = dataArray[i]
+      props.analyser.getByteFrequencyData(dataArray)
 
-        if (thisDataArray) {
-          barHeight = thisDataArray / 2
-        } else {
-          barHeight = 10
+      if (canvasContext) {
+        canvasContext.fillStyle = 'rgb(0 0 0)'
+        canvasContext.fillRect(0, 0, 150, 150)
+
+        const barWidth = (150 / bufferLength) * 2.5
+        let barHeight
+        let x = 0
+
+        for (let i = 0; i < bufferLength; i++) {
+          const thisDataArray = dataArray[i]
+
+          if (thisDataArray) {
+            barHeight = thisDataArray / 2
+          } else {
+            barHeight = 10
+          }
+
+          canvasContext.fillStyle = `rgb(${barHeight + 100} 50 50)`
+          canvasContext.fillRect(x, 150 - barHeight / 2, barWidth, barHeight)
+
+          x += barWidth + 1
         }
-
-        canvasContext.fillStyle = `rgb(${barHeight + 100} 50 50)`
-        canvasContext.fillRect(x, 150 - barHeight / 2, barWidth, barHeight)
-
-        x += barWidth + 1
       }
     }
-  }
 
-  draw()
+    draw()
+  }
 })
 onUnmounted(() => {
   cancelAnimationFrame(drawVisual)
@@ -57,5 +59,5 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <canvas id="myCanvas2" width="150" height="150"></canvas>
+  <canvas ref="myCanvas" width="150" height="150"></canvas>
 </template>

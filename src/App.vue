@@ -10,7 +10,9 @@ const toggleDark = useToggle(isDark)
 </script>
 
 <template>
-  <div class="flex h-full flex-col p-4 dark:bg-black">
+  <div
+    class="flex h-full flex-col bg-gradient-to-br from-blue-400 via-indigo-500 to-purple-600 p-4 dark:bg-black dark:bg-none"
+  >
     <header class="relative">
       <button
         class="absolute right-0 mx-auto rounded-xl bg-black px-3 py-1 text-xs text-amber-50 dark:bg-gray-400 dark:text-white"
