@@ -12,7 +12,7 @@ for (let index = 0; index < timelineTotal; index++) {
 </script>
 
 <template>
-  <div class="relative h-full overflow-hidden bg-white">
+  <div class="relative h-full overflow-hidden bg-white dark:bg-black">
     <SingleTimeline v-for="item in timelineArray" :key="item" />
   </div>
 </template>

@@ -29,7 +29,6 @@ const progressPercentage = ref(0)
 const volumeInputValue = ref(1)
 
 const audioContext = new window.AudioContext()
-console.log('initial state', audioContext.state)
 
 const isPlaying = ref(false)
 
@@ -128,7 +127,7 @@ onMounted(() => {
   <div class="relative z-10">
     <div class="flex h-20 basis-1/3 items-center justify-between gap-4 [&>*]:flex-1">
       <div class="mt-5 text-xl font-bold">
-        <div class="border-0 border-b-2 border-gray-300 px-1 py-1">
+        <div class="border-0 border-b-2 border-gray-300 px-1 py-1 dark:text-white">
           {{ tracks[currentIndex]?.title }}
         </div>
       </div>
@@ -151,7 +150,7 @@ onMounted(() => {
         />
       </div>
     </div>
-    <div class="text-xs font-bold tabular-nums">
+    <div class="text-xs font-bold tabular-nums dark:text-white">
       {{ formatTime(elapsed) }} / {{ formatTime(duration) }}
     </div>
     <div class="mt-1 opacity-80 hover:opacity-100">

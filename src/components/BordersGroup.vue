@@ -1,7 +1,19 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import BordersItem from '@/components/BordersItem.vue'
 
 import { getRandomIntInc } from '@/utils/MathUtils.ts'
+
+import { useMouseGesture } from '@/composables/useMouseGesture.ts'
+const { mouseDownHandler, mouseUpHandler } = useMouseGesture()
+
+interface StyleObject {
+  id: number
+  classes: string[]
+}
+
+const borders = ref<StyleObject[]>([])
+const keyIndex = ref(0)
 
 const borderStyles = [
   'border-1',
@@ -75,46 +87,53 @@ const colorWeights = [
   '-950',
 ]
 
-const totalLayers = 32
-const totalStylesPerLayer = 9
+const resetValues = () => {
+  const totalLayers = 32
+  const totalStylesPerLayer = 9
 
-const objects = []
-
-for (let i = 0; i < totalLayers; i++) {
-  interface StyleObject {
-    id: number
-    classes: string[]
-  }
-
-  const layerObject: StyleObject = {
-    id: i,
-    classes: ['border'],
-  }
-
-  for (let i = 0; i < totalStylesPerLayer; i++) {
-    const randomInt = getRandomIntInc(0, borderStyles.length - 1)
-    const thisStyle = borderStyles[randomInt]
-    if (thisStyle) {
-      layerObject.classes.push(thisStyle)
+  const objects = []
+  for (let i = 0; i < totalLayers; i++) {
+    const layerObject: StyleObject = {
+      id: i,
+      classes: ['border'],
     }
+
+    for (let i = 0; i < totalStylesPerLayer; i++) {
+      const randomInt = getRandomIntInc(0, borderStyles.length - 1)
+      const thisStyle = borderStyles[randomInt]
+      if (thisStyle) {
+        layerObject.classes.push(thisStyle)
+      }
+    }
+
+    const randomIntColorBase = getRandomIntInc(0, colorBases.length - 1)
+    const randomIntColorWeight = getRandomIntInc(0, colorWeights.length - 1)
+
+    const colorString =
+      'border-' + colorBases[randomIntColorBase] + colorWeights[randomIntColorWeight]
+
+    layerObject.classes.push(colorString)
+
+    objects.push(layerObject)
   }
 
-  const randomIntColorBase = getRandomIntInc(0, colorBases.length - 1)
-  const randomIntColorWeight = getRandomIntInc(0, colorWeights.length - 1)
-
-  const colorString =
-    'border-' + colorBases[randomIntColorBase] + colorWeights[randomIntColorWeight]
-
-  layerObject.classes.push(colorString)
-
-  objects.push(layerObject)
+  borders.value = objects
 }
 
-const borders = objects
+const updateAnimation = (e: MouseEvent) => {
+  mouseUpHandler(e)
+
+  resetValues()
+  keyIndex.value++
+}
 </script>
 
 <template>
-  <div class="flex h-full overflow-hidden bg-black">
-    <BordersItem :depth="-1" :maxDepth="borders.length - 1" :borders="borders" />
+  <div
+    @mousedown="mouseDownHandler"
+    @mouseup="updateAnimation"
+    class="flex h-full overflow-hidden bg-black"
+  >
+    <BordersItem :key="keyIndex" :depth="-1" :maxDepth="borders.length - 1" :borders="borders" />
   </div>
 </template>

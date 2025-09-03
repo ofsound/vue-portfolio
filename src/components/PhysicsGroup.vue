@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import { useMouseGesture } from '@/composables/useMouseGesture.ts'
+const { mouseDownHandler, mouseUpHandler, startX, startY, vectorX } = useMouseGesture()
+
 import SinglePhysics from '@/components/SinglePhysics.vue'
 
 import { getRandomIntInc } from '@/utils/MathUtils.ts'
@@ -11,7 +14,10 @@ interface StyleObject {
   classes: string[]
 }
 
+const keyIndex = ref(0)
+
 const classesArray = ref<StyleObject[]>([])
+const itemsPerGroup = ref(5)
 
 const classPool = [
   'rounded',
@@ -26,33 +32,49 @@ const classPool = [
   'scale-200',
 ]
 
-const recursionDepth = 3
-const itemsPerGroup = 5
-const classesPerLayer = 6
+const resetValues = () => {
+  classesArray.value.length = 0
 
-for (let i = 0; i < recursionDepth + 1; i++) {
-  const object: StyleObject = {
-    id: i,
-    classes: [],
-  }
+  const recursionDepth = Math.round(3 * startX.value) + 1
+  itemsPerGroup.value = Math.round(5 * startY.value)
+  const classesPerLayer = Math.round(10 * vectorX.value)
 
-  for (let i = 0; i < classesPerLayer; i++) {
-    const randomInt = getRandomIntInc(0, classPool.length - 1)
-    const randomClassFromPool = classPool[randomInt]
-    if (randomClassFromPool) {
-      object.classes.push(randomClassFromPool)
+  for (let i = 0; i < recursionDepth + 1; i++) {
+    const object: StyleObject = {
+      id: i,
+      classes: [],
     }
+
+    for (let i = 0; i < classesPerLayer; i++) {
+      const randomInt = getRandomIntInc(0, classPool.length - 1)
+      const randomClassFromPool = classPool[randomInt]
+      if (randomClassFromPool) {
+        object.classes.push(randomClassFromPool)
+      }
+    }
+
+    object.classes.push(randomBackgroundColor())
+
+    classesArray.value.push(object)
   }
+}
 
-  object.classes.push(randomBackgroundColor())
+const updateAnimation = (e: MouseEvent) => {
+  mouseUpHandler(e)
 
-  classesArray.value.push(object)
+  resetValues()
+  keyIndex.value++
 }
 </script>
 
 <template>
-  <div class="relative flex h-full bg-gray-200">
+  <div
+    @mousedown="mouseDownHandler"
+    @mouseup="updateAnimation"
+    class="relative flex h-full bg-gray-200 dark:bg-gray-950"
+  >
     <SinglePhysics
+      :key="keyIndex"
       :depth="-1"
       :itemsPerGroup="itemsPerGroup"
       :maxDepth="classesArray.length - 1"
