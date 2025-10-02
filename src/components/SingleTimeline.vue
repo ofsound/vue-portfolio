@@ -7,15 +7,21 @@ import { randomBackgroundColor } from '@/utils/TailwindColors.ts'
 
 gsap.registerPlugin(MotionPathPlugin)
 
+interface Props {
+  tweensTotal: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  tweensTotal: 10,
+})
+
 const div = ref(null)
 
 const bgColorClass = ref(randomBackgroundColor())
 
 const tweens: object[] = []
 
-const tweensLength = 50
-
-for (let index = 0; index < tweensLength; index++) {
+for (let index = 0; index < props.tweensTotal; index++) {
   const tweenObject = {
     duration: getRandomIntInc(12, 20),
     x: getRandomIntIncBip(300),

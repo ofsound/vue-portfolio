@@ -5,7 +5,7 @@ import BordersItem from '@/components/BordersItem.vue'
 import { getRandomIntInc } from '@/utils/MathUtils.ts'
 
 import { useMouseGesture } from '@/composables/useMouseGesture.ts'
-const { mouseDownHandler, mouseUpHandler } = useMouseGesture()
+const { mouseDownHandler, mouseUpHandler, startX, startY } = useMouseGesture()
 
 interface StyleObject {
   id: number
@@ -88,8 +88,8 @@ const colorWeights = [
 ]
 
 const resetValues = () => {
-  const totalLayers = 32
-  const totalStylesPerLayer = 9
+  const totalLayers = 32 * startX.value
+  const totalStylesPerLayer = 9 * startY.value
 
   const objects = []
   for (let i = 0; i < totalLayers; i++) {
