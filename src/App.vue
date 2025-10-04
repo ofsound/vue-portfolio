@@ -23,7 +23,7 @@ const toggleDark = useToggle(isDark)
       <SiteNav />
     </header>
     <main
-      class="my-4 w-full grow-1 overflow-auto border-4 border-gray-100 px-4 py-4 dark:border-gray-300"
+      class="my-4 hidden w-full grow-1 overflow-auto border-4 border-gray-100 px-4 py-4 dark:border-gray-300"
     >
       <RouterView />
     </main>

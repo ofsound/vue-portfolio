@@ -4,7 +4,7 @@ import { onMounted, ref, watch } from 'vue'
 import SinglePlaylist from '@/components/player/SinglePlaylist.vue'
 import PlayerTransport from '@/components/player/PlayerTransport.vue'
 import SpectrumVisualizer from '@/components/player/SpectrumVisualizer.vue'
-import WaveformVisualizer from '@/components/player/WaveformVisualizer.vue'
+// import WaveformVisualizer from '@/components/player/WaveformVisualizer.vue'
 
 import { useAudioContext } from '@/composables/useAudioContext.ts'
 
@@ -162,8 +162,8 @@ onMounted(() => {
       </div>
     </div>
   </div>
-  <div class="mt-6 gap-8 bg-gray-900 p-10">
+  <div class="mt-6 grow-1 gap-8 bg-gray-900 p-10">
     <SpectrumVisualizer :analyser="getAnalyser()" />
-    <WaveformVisualizer :analyser="getAnalyser()" />
+    <!-- <WaveformVisualizer :analyser="getAnalyser()" /> -->
   </div>
 </template>
