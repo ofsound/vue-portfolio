@@ -162,7 +162,7 @@ onMounted(() => {
       </div>
     </div>
   </div>
-  <div class="mt-6 hidden gap-8 bg-gray-900 p-10">
+  <div class="mt-6 gap-8 bg-gray-900 p-10">
     <SpectrumVisualizer :analyser="getAnalyser()" />
     <WaveformVisualizer :analyser="getAnalyser()" />
   </div>

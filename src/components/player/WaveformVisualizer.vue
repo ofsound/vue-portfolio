@@ -14,42 +14,48 @@ const canvas = useTemplateRef('myCanvas')
 
 onMounted(() => {
   if (canvas.value) {
-    const canvasContext = canvas.value.getContext('2d')
+    const canvasCtx = canvas.value.getContext('2d')
 
-    if (canvasContext) {
-      canvasContext.clearRect(0, 0, 150, 150)
+    if (canvasCtx) {
+      canvasCtx.clearRect(0, 0, 150, 150)
     }
 
     function draw() {
       drawVisual = requestAnimationFrame(draw)
 
-      props.analyser.getByteFrequencyData(dataArray)
+      props.analyser.getByteTimeDomainData(dataArray)
 
-      if (canvasContext) {
-        canvasContext.fillStyle = 'rgb(0 0 0)'
-        canvasContext.fillRect(0, 0, 150, 150)
+      if (canvasCtx) {
+        canvasCtx.fillStyle = 'rgb(200 200 200)'
+        canvasCtx.fillRect(0, 0, 150, 150)
 
-        const barWidth = (150 / bufferLength) * 2.5
-        let barHeight
+        canvasCtx.lineWidth = 2
+        canvasCtx.strokeStyle = 'rgb(0 0 0)'
+        canvasCtx.beginPath()
+
+        const sliceWidth = 150 / bufferLength
         let x = 0
-
         for (let i = 0; i < bufferLength; i++) {
           const thisDataArray = dataArray[i]
 
           if (thisDataArray) {
-            barHeight = thisDataArray / 2
-          } else {
-            barHeight = 10
+            const v = thisDataArray / 128.0
+            const y = v * (150 / 2)
+
+            if (i === 0) {
+              canvasCtx.moveTo(x, y)
+            } else {
+              canvasCtx.lineTo(x, y)
+            }
+
+            x += sliceWidth
           }
-
-          canvasContext.fillStyle = `rgb(${barHeight + 100} 50 50)`
-          canvasContext.fillRect(x, 150 - barHeight / 2, barWidth, barHeight)
-
-          x += barWidth + 1
         }
+
+        canvasCtx.lineTo(150, 150 / 2)
+        canvasCtx.stroke()
       }
     }
-
     draw()
   }
 })
