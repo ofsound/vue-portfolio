@@ -11,6 +11,7 @@ import { useAudioContext } from '@/composables/useAudioContext.ts'
 import { formatTime } from '@/utils/MathUtils.ts'
 
 const tracks = [
+  { title: 'Kick Snare Hat', file: 'ksh.mp3' },
   { title: 'Ghost Camels', file: '01.mp3' },
   { title: 'Abu Rawash', file: '02.mp3' },
   { title: 'Get Thee Behind Me', file: '03.mp3' },
