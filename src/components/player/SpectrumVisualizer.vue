@@ -35,8 +35,6 @@ binTotalsDisplay.value = new Array(8).fill(0)
 const binTriggers = ref<boolean[]>([])
 binTriggers.value = new Array(8).fill(false)
 
-const binThresholds = [300, 800, 700, 600, 500, 400, 200, 10]
-
 const div0 = ref(null)
 const div1 = ref(null)
 const div2 = ref(null)
@@ -52,6 +50,19 @@ for (let index = 0; index < binGroupTotal; index++) {
   const element = [binGroupSize * index, binGroupSize * (index + 1)]
   binsArray.value.push(element)
 }
+
+binsArray.value = [
+  [0, 1],
+  [2, 6],
+  [7, 10],
+  [11, 15],
+  [16, 22],
+  [23, 32],
+  [33, 64],
+  [65, 128],
+]
+
+const binThresholds = [220, 400, 300, 300, 500, 400, 200, 10]
 
 const handleTrigger = (thisBin: number) => {
   for (let index = 0; index < divArray.length; index++) {
@@ -123,7 +134,7 @@ onMounted(() => {
                   // console.log('upper:', upperLimit)
 
                   if (lowerLimit != null && upperLimit) {
-                    if (i > lowerLimit && i < upperLimit) {
+                    if (i >= lowerLimit && i < upperLimit) {
                       // console.log(j)
 
                       binTotals[j] = thisDataArray + (binTotals[j] as number)
