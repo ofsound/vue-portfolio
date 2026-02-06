@@ -163,7 +163,7 @@ onMounted(() => {
       </div>
     </div>
   </div>
-  <div class="mt-6 grow-1 gap-8 bg-gray-900 p-10">
+  <div v-if="false" class="mt-6 grow-1 gap-8 bg-gray-900 p-10">
     <SpectrumVisualizer :analyser="getAnalyser()" />
     <!-- <WaveformVisualizer :analyser="getAnalyser()" /> -->
   </div>

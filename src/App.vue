@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import PersistentPlayer from '@/components/PersistentPlayer.vue'
-
-import SiteNav from '@/components/SiteNav.vue'
-
 import { useDark, useToggle } from '@vueuse/core'
+
+import PersistentPlayer from '@/components/PersistentPlayer.vue'
+import SiteNav from '@/components/SiteNav.vue'
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
@@ -23,7 +22,7 @@ const toggleDark = useToggle(isDark)
       <SiteNav />
     </header>
     <main
-      class="my-4 hidden w-full grow-1 overflow-auto border-4 border-gray-100 px-4 py-4 dark:border-gray-300"
+      class="my-4 w-full flex-1 overflow-auto border-4 border-gray-100 px-4 py-4 dark:border-gray-300"
     >
       <RouterView />
     </main>

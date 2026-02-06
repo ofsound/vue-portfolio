@@ -19,7 +19,7 @@ let drawVisual = -1
 
 const canvas = useTemplateRef('spectrumCanvas')
 
-const canvasWidth = ref(600) // make this dynamic
+const canvasWidth = ref(600)
 
 const itemRefs = useTemplateRef('items')
 
@@ -31,28 +31,24 @@ interface BinObject {
 
 const binObjects = ref<BinObject[]>([
   { low: 0, high: 1, threshold: 350 },
-  { low: 2, high: 5, threshold: 180 },
-  { low: 6, high: 10, threshold: 180 },
-  { low: 11, high: 20, threshold: 180 },
+  { low: 2, high: 5, threshold: 400 },
+  { low: 6, high: 10, threshold: 500 },
+  { low: 11, high: 13, threshold: 180 },
 ])
 
 const binTotalsDisplay = ref<number[]>([])
 binTotalsDisplay.value = new Array(binObjects.value.length).fill(0)
 
-const binTriggers = ref<boolean[]>([])
-binTriggers.value = new Array(binObjects.value.length).fill(false)
-
-const handleTrigger = (thisBin: number) => {
+const handleTrigger = (thisBin: number, strength: number) => {
   if (itemRefs.value) {
     for (let index = 0; index < itemRefs.value.length; index++) {
       const thisBinRef = itemRefs.value[thisBin]
-
       if (thisBinRef) {
         const thisDiv = thisBinRef
 
         gsap.to(thisDiv, {
           duration: 0.05,
-          x: '+=1px',
+          x: '+=' + strength / 100 + 'px',
         })
       }
     }
@@ -67,15 +63,13 @@ watch(binTotalsDisplay, (newValue, oldValue) => {
 
     if (thisValue > thisThreshold) {
       if (prevValue < thisThreshold) {
-        handleTrigger(index)
+        handleTrigger(index, thisValue - thisThreshold)
       }
     }
   }
 })
 
 onMounted(() => {
-  console.log(itemRefs.value)
-
   if (canvas.value) {
     const canvasContext = canvas.value.getContext('2d')
 
@@ -99,19 +93,18 @@ onMounted(() => {
         const binTotals: number[] = new Array(binObjects.value.length).fill(0)
 
         for (let i = 0; i < bufferLength; i++) {
-          const thisDataArray = dataArray[i]
+          const dataPoint = dataArray[i]
 
-          if (thisDataArray) {
-            barHeight = thisDataArray / 2
+          if (dataPoint) {
+            barHeight = dataPoint / 2
 
             for (let j = 0; j < binObjects.value.length; j++) {
               if (binObjects.value[j]) {
                 const thisBin = binObjects.value[j]
-
                 if (thisBin) {
                   if (thisBin.low != null && thisBin.high) {
                     if (i >= thisBin.low && i <= thisBin.high) {
-                      binTotals[j] = thisDataArray + (binTotals[j] as number)
+                      binTotals[j] = dataPoint + (binTotals[j] as number)
                     }
                   }
                 }
