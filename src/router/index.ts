@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import GridsView from '../views/GridsView.vue'
 import BordersView from '../views/BordersView.vue'
@@ -12,8 +11,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      redirect: '/grids',
     },
     {
       path: '/about',
