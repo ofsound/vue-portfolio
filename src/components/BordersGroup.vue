@@ -16,10 +16,10 @@ const borders = ref<StyleObject[]>([])
 const keyIndex = ref(0)
 
 const borderStyles = [
-  'border-1',
+  'border-[1px]',
   'border-4',
-  'border-5',
-  'border-6',
+  'border-[5px]',
+  'border-[6px]',
   'border-8',
   'border-dashed',
   'border-dotted',

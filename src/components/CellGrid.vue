@@ -12,9 +12,9 @@ interface Cell {
   innerArray: Cell[]
 }
 
-defineProps({
-  cellArray: Array<Cell>,
-})
+defineProps<{
+  cellArray: Cell[]
+}>()
 </script>
 
 <template>
@@ -28,6 +28,5 @@ defineProps({
 
       <img v-if="cell.isImage" class="h-full w-full object-cover" :src="cell.url" alt="" />
     </div>
-    <div></div>
   </section>
 </template>

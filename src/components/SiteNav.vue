@@ -14,7 +14,7 @@ const navArray = ref([
 
 <template>
   <nav
-    class="mx-auto mt-6 mb-4 flex max-w-max gap-6 rounded-xl bg-linear-to-t from-sky-600 to-indigo-300 px-7 py-2"
+    class="mx-auto mt-6 mb-4 flex max-w-max gap-6 rounded-xl bg-gradient-to-t from-sky-600 to-indigo-300 px-7 py-2"
   >
     <template v-for="navItem in navArray" :key="navItem.url">
       <RouterLink

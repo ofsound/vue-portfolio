@@ -8,24 +8,19 @@ export function useMouseGesture() {
   const vectorY = ref(0)
 
   const mouseDownHandler = (event: MouseEvent) => {
-    const clickedElement = event.target as HTMLElement
-
-    const offsetX = event.offsetX
-    startX.value = offsetX / clickedElement.clientWidth
-
-    const offsetY = event.offsetY
-    startY.value = offsetY / clickedElement.clientHeight
+    const container = event.currentTarget as HTMLElement
+    if (!container) return
+    const rect = container.getBoundingClientRect()
+    startX.value = (event.clientX - rect.left) / rect.width
+    startY.value = (event.clientY - rect.top) / rect.height
   }
 
   const mouseUpHandler = (event: MouseEvent) => {
-    const clickedElement = event.target as HTMLElement
-
-    const offsetX = event.offsetX
-    const mouseUpX = offsetX / clickedElement.clientWidth
-
-    const offsetY = event.offsetY
-    const mouseUpY = offsetY / clickedElement.clientHeight
-
+    const container = event.currentTarget as HTMLElement
+    if (!container) return
+    const rect = container.getBoundingClientRect()
+    const mouseUpX = (event.clientX - rect.left) / rect.width
+    const mouseUpY = (event.clientY - rect.top) / rect.height
     vectorX.value = mouseUpX - startX.value
     vectorY.value = mouseUpY - startY.value
   }

@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
-import MusicView from '../views/MusicView.vue'
 import GridsView from '../views/GridsView.vue'
 import BordersView from '../views/BordersView.vue'
 import TimelinesView from '../views/TimelinesView.vue'
@@ -20,11 +19,6 @@ const router = createRouter({
       path: '/about',
       name: 'about',
       component: AboutView,
-    },
-    {
-      path: '/music',
-      name: 'music',
-      component: MusicView,
     },
     {
       path: '/grids',

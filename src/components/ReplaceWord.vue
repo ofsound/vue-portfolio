@@ -25,6 +25,6 @@ onMounted(() => {
 
 <template>
   <div ref="textOne" class="absolute top-0 left-0 mb-4 max-w-max px-2 py-1 uppercase">
-    superstitious allies
+    {{ word }}
   </div>
 </template>
