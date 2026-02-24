@@ -12,6 +12,10 @@ export default defineConfigWithVueTs(
   {
     name: 'app/files-to-lint',
     files: ['**/*.{ts,mts,tsx,vue}'],
+    rules: {
+      'vue/no-unused-components': 'error',
+      '@typescript-eslint/no-unused-vars': 'error',
+    },
   },
 
   globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
