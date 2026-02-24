@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { gsap } from 'gsap'
 
 import { PhysicsPropsPlugin } from 'gsap/PhysicsPropsPlugin'
@@ -36,11 +36,12 @@ if (props.depth < props.maxDepth) {
   }
 }
 
-const div = ref(null)
+const div = ref<HTMLElement | null>(null)
+let physicsTween: gsap.core.Tween | null = null
 
 onMounted(() => {
   if (div.value) {
-    gsap.to(div.value, {
+    physicsTween = gsap.to(div.value, {
       delay: props.depth * 1,
       duration: 30,
       physics2D: {
@@ -63,6 +64,11 @@ onMounted(() => {
       },
     })
   }
+})
+
+onUnmounted(() => {
+  physicsTween?.kill()
+  physicsTween = null
 })
 </script>
 

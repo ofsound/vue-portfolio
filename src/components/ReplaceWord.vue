@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { gsap } from 'gsap'
 import { TextPlugin } from 'gsap/TextPlugin'
 
@@ -7,19 +7,27 @@ import { getRandomIntInc } from '@/utils/MathUtils.ts'
 
 gsap.registerPlugin(TextPlugin)
 
-const textOne = ref(null)
+const textOne = ref<HTMLElement | null>(null)
+let tween: gsap.core.Tween | null = null
 
 const props = defineProps<{
   word: string
 }>()
 
 onMounted(() => {
-  gsap.to(textOne.value, {
+  if (!textOne.value) return
+
+  tween = gsap.to(textOne.value, {
     duration: 2,
     x: getRandomIntInc(0, 500),
     y: getRandomIntInc(0, 500),
     text: props.word,
   })
+})
+
+onUnmounted(() => {
+  tween?.kill()
+  tween = null
 })
 </script>
 

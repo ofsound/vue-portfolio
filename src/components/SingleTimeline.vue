@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { gsap } from 'gsap'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import { getRandomIntInc, getRandomIntIncBip } from '@/utils/MathUtils.ts'
@@ -15,40 +15,43 @@ const props = withDefaults(defineProps<Props>(), {
   tweensTotal: 10,
 })
 
-const div = ref(null)
+const div = ref<HTMLElement | null>(null)
 
 const bgColorClass = ref(randomBackgroundColor())
+let timeline: gsap.core.Timeline | null = null
 
-const tweens: object[] = []
+const buildTimeline = () => {
+  if (!div.value) return
 
-for (let index = 0; index < props.tweensTotal; index++) {
-  const tweenObject = {
-    duration: getRandomIntInc(12, 20),
-    x: getRandomIntIncBip(300),
-    y: getRandomIntIncBip(800),
-    skewX: getRandomIntIncBip(50),
-    skewY: getRandomIntIncBip(50),
-    rotation: getRandomIntIncBip(180),
-    scaleX: 1 + Math.random() * 10,
-    ease: 'power2.inOut',
-    motionPath: [
-      { x: getRandomIntIncBip(300), y: getRandomIntIncBip(300) },
-      { x: getRandomIntIncBip(300), y: getRandomIntIncBip(300) },
-      { x: getRandomIntIncBip(300), y: getRandomIntIncBip(300) },
-    ],
+  timeline?.kill()
+  timeline = gsap.timeline({ repeat: -1, yoyo: true })
+
+  const totalTweens = Math.max(1, props.tweensTotal)
+  for (let index = 0; index < totalTweens; index++) {
+    timeline.to(div.value, {
+      duration: getRandomIntInc(12, 20),
+      x: getRandomIntIncBip(300),
+      y: getRandomIntIncBip(800),
+      skewX: getRandomIntIncBip(50),
+      skewY: getRandomIntIncBip(50),
+      rotation: getRandomIntIncBip(180),
+      scaleX: 1 + Math.random() * 10,
+      ease: 'power2.inOut',
+      motionPath: [
+        { x: getRandomIntIncBip(300), y: getRandomIntIncBip(300) },
+        { x: getRandomIntIncBip(300), y: getRandomIntIncBip(300) },
+        { x: getRandomIntIncBip(300), y: getRandomIntIncBip(300) },
+      ],
+    })
   }
-  tweens.push(tweenObject)
 }
 
-onMounted(() => {
-  const timeline = gsap.timeline({ repeat: -1, yoyo: true })
+onMounted(buildTimeline)
+watch(() => props.tweensTotal, buildTimeline)
 
-  for (let index = 0; index < tweens.length; index++) {
-    const tweenObject = tweens[index]
-    if (tweenObject) {
-      timeline.to(div.value, tweenObject)
-    }
-  }
+onUnmounted(() => {
+  timeline?.kill()
+  timeline = null
 })
 </script>
 

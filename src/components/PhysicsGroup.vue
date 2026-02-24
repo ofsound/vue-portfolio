@@ -59,7 +59,7 @@ const resetValues = () => {
   }
 }
 
-const updateAnimation = (e: MouseEvent) => {
+const updateAnimation = (e: PointerEvent) => {
   mouseUpHandler(e)
 
   resetValues()
@@ -69,9 +69,10 @@ const updateAnimation = (e: MouseEvent) => {
 
 <template>
   <div
-    @mousedown="mouseDownHandler"
-    @mouseup="updateAnimation"
-    class="relative flex h-full bg-gray-200 dark:bg-gray-950"
+    @pointerdown="mouseDownHandler"
+    @pointerup="updateAnimation"
+    @pointercancel="mouseUpHandler"
+    class="relative flex h-full touch-none bg-gray-200 dark:bg-gray-950"
   >
     <SinglePhysics
       :key="keyIndex"

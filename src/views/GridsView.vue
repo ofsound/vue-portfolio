@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import CellGrid from '@/components/CellGrid.vue'
+import darkWasTheNightImage from '@/assets/dark-was-the-night.jpg'
+import screenshotImage from '@/assets/ss.png'
 
 interface Cell {
   id: number
@@ -18,7 +20,7 @@ const cellArray = ref<Cell[]>([
   {
     isImage: true,
     id: index++,
-    url: '/src/assets/dark-was-the-night.jpg',
+    url: darkWasTheNightImage,
     color: 'bg-blue-500',
     isInner: false,
     style: '',
@@ -54,7 +56,7 @@ const cellArray = ref<Cell[]>([
           {
             isImage: true,
             id: index++,
-            url: '/src/assets/ss.png',
+            url: screenshotImage,
             color: 'bg-amber-500',
             isInner: false,
             style: '',
@@ -79,7 +81,7 @@ const cellArray = ref<Cell[]>([
                   {
                     isImage: true,
                     id: index++,
-                    url: '/src/assets/ss.png',
+                    url: screenshotImage,
                     color: 'bg-green-500',
                     isInner: false,
                     style: '',
@@ -148,7 +150,7 @@ const cellArray = ref<Cell[]>([
       {
         isImage: true,
         id: index++,
-        url: '/src/assets/ss.png',
+        url: screenshotImage,
         color: 'bg-blue-500',
         isInner: false,
         style: '',
@@ -159,7 +161,7 @@ const cellArray = ref<Cell[]>([
   {
     isImage: true,
     id: index++,
-    url: '/src/assets/ss.png',
+    url: screenshotImage,
     color: 'bg-blue-500',
     isInner: false,
     style: '',

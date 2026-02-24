@@ -21,7 +21,7 @@ const resetValues = () => {
   }
 }
 
-const updateAnimation = (e: MouseEvent) => {
+const updateAnimation = (e: PointerEvent) => {
   mouseUpHandler(e)
   resetValues()
 }
@@ -31,9 +31,10 @@ onMounted(resetValues)
 
 <template>
   <div
-    @mousedown="mouseDownHandler"
-    @mouseup="updateAnimation"
-    class="relative h-full overflow-hidden bg-white dark:bg-black"
+    @pointerdown="mouseDownHandler"
+    @pointerup="updateAnimation"
+    @pointercancel="mouseUpHandler"
+    class="relative h-full touch-none overflow-hidden bg-white dark:bg-black"
   >
     <SingleTimeline v-for="item in timelineArray" :key="item" :tweensTotal="tweensTotal" />
   </div>

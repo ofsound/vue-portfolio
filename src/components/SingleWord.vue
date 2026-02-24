@@ -1,32 +1,46 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
 
 import { getRandomIntInc } from '@/utils/MathUtils.ts'
 
-const textOne = ref(null)
+const textOne = ref<HTMLElement | null>(null)
+let split: SplitText | null = null
+const tweens: gsap.core.Tween[] = []
 
 defineProps<{
   word: string
 }>()
 
 onMounted(() => {
-  const split = SplitText.create(textOne.value)
+  if (!textOne.value) return
 
-  gsap.from(split.chars, {
-    duration: 1,
-    x: getRandomIntInc(0, 300),
-    y: getRandomIntInc(0, 300),
-    autoAlpha: 0,
-    stagger: 0.1,
-  })
+  split = SplitText.create(textOne.value)
 
-  gsap.to(textOne.value, {
-    duration: 2,
-    x: getRandomIntInc(0, 300),
-    y: getRandomIntInc(0, 300),
-  })
+  tweens.push(
+    gsap.from(split.chars, {
+      duration: 1,
+      x: getRandomIntInc(0, 300),
+      y: getRandomIntInc(0, 300),
+      autoAlpha: 0,
+      stagger: 0.1,
+    }),
+  )
+
+  tweens.push(
+    gsap.to(textOne.value, {
+      duration: 2,
+      x: getRandomIntInc(0, 300),
+      y: getRandomIntInc(0, 300),
+    }),
+  )
+})
+
+onUnmounted(() => {
+  tweens.forEach((tween) => tween.kill())
+  split?.revert()
+  split = null
 })
 </script>
 

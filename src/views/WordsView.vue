@@ -37,8 +37,8 @@ const wordArray = ref([
 
 <template>
   <div class="relative dark:text-white">
-    <ScrambleWord v-for="item in wordArray" :key="item" :word="item" />
-    <SingleWord v-for="item in wordArray" :key="item" :word="item" />
-    <ReplaceWord v-for="item in wordArray" :key="item" :word="item" />
+    <ScrambleWord v-for="item in wordArray" :key="`scramble-${item}`" :word="item" />
+    <SingleWord v-for="item in wordArray" :key="`single-${item}`" :word="item" />
+    <ReplaceWord v-for="item in wordArray" :key="`replace-${item}`" :word="item" />
   </div>
 </template>

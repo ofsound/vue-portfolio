@@ -120,7 +120,7 @@ const resetValues = () => {
   borders.value = objects
 }
 
-const updateAnimation = (e: MouseEvent) => {
+const updateAnimation = (e: PointerEvent) => {
   mouseUpHandler(e)
 
   resetValues()
@@ -130,9 +130,10 @@ const updateAnimation = (e: MouseEvent) => {
 
 <template>
   <div
-    @mousedown="mouseDownHandler"
-    @mouseup="updateAnimation"
-    class="flex h-full overflow-hidden bg-black"
+    @pointerdown="mouseDownHandler"
+    @pointerup="updateAnimation"
+    @pointercancel="mouseUpHandler"
+    class="flex h-full touch-none overflow-hidden bg-black"
   >
     <BordersItem :key="keyIndex" :depth="-1" :maxDepth="borders.length - 1" :borders="borders" />
   </div>
